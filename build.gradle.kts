@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "nl.bioinf.jveenstra4"
+group = "nl.bioinf.MuSeq"
 version = "1.0-SNAPSHOT"
 
 repositories {
