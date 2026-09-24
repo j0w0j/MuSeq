@@ -20,3 +20,10 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+// https://gradleup.com/shadow/configuration/#configuring-the-jar-manifest
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MuSeq.Main"
+    }
+}
