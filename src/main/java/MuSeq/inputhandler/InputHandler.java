@@ -49,7 +49,7 @@ class Sing implements Runnable {
 
     @Override
     public void run() {
-        // als testje print het nu alle opties
+        // als testje print het nu alle opties TODO dit weghalen uiteindelijk
         System.out.println("instrument: " + instrument);
         System.out.println("bpm: " + bpm);
         System.out.println("chromosome: " + chromosomeNumber);
@@ -57,7 +57,7 @@ class Sing implements Runnable {
         System.out.println("output: " + outputFile);
         System.out.println("input: " + inputFile);
 
-        // print voor nu alleen het bestand naar de terminal
+        // print voor nu alleen het bestand naar de terminal TODO dit weghalen/vervangen uiteindelijk
         FastaReader reader = new FastaReader();
         reader.readFasta(inputFile);
     }
