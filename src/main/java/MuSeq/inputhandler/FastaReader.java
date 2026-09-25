@@ -19,8 +19,11 @@ public class FastaReader {
             // read fasta file line by line (non-empty lines only)
             while ((line = br.readLine()) != null) {
 
-                // skip header lines
-                if (line.startsWith(">")) {
+                // remove leading and trailing space (similair to python's .strip())
+                line = line.trim();
+
+                // skip header or empty lines
+                if (line.startsWith(">") | line.isEmpty()) {
                     continue;
                 }
 
