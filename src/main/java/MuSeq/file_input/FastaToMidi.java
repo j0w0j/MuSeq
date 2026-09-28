@@ -6,12 +6,16 @@ import java.io.IOException;
 
 
 /**
- * Documentatie TODO
- *
- * https://www.w3schools.com/java/java_bufferedreader.asp
+ * Contains a method to convert FASTA files to MIDI files.
  */
-public class FastaReader {
-    public void readFasta(String filepath) {
+public class FastaToMidi {
+    /**
+     * Reads a FASTA file, converts it from nucleotides to MIDI characters,
+     * and then writes it to a MIDI file.
+     * @param filepath: path to the FASTA file to read, as String.
+     */
+    public void convertFastaToMidi(String filepath) {
+        // https://www.w3schools.com/java/java_bufferedreader.asp
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
             String codonsToConvert = "";

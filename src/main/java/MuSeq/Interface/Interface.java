@@ -1,6 +1,6 @@
 package MuSeq.Interface;
 
-import MuSeq.file_input.FastaReader;
+import MuSeq.file_input.FastaToMidi;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -18,13 +18,14 @@ public class Interface {
 }
 
 /**
-* Documentatie van de subcommand sing TODO
+* Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
+ * TODO misschien optie toevoegen voor synthizer, of deze wel of niet gebruikt moet worden?
  */
 @Command(name = "sing", mixinStandardHelpOptions = true,
         description = "vet coole description voor MuSeq sing")
 class Sing implements Runnable {
 
-    // ALLE OPTIES
+    // ALL OPTIONS
 
     @Option(names = {"-i", "--instrument"}, description = "Instrument name")
     String instrument = "";
@@ -41,12 +42,12 @@ class Sing implements Runnable {
     @Option(names = {"-o", "--output"}, description = "Name of the output MIDI file")
     String outputFile = "";
 
-    // INPUT BESTAND
+    // INPUT FASTA FILE
 
     @Parameters(paramLabel = "Input FASTA file", description = "Input FASTA file to convert to MIDI")
     String inputFile = "";
 
-    // SING FUNCTIONALITEIT
+    // SING FUNCTIONALITY
 
     @Override
     public void run() {
@@ -59,8 +60,8 @@ class Sing implements Runnable {
         System.out.println("input: " + inputFile);
 
         // print voor nu alleen het bestand naar de terminal TODO dit weghalen/vervangen uiteindelijk
-        FastaReader reader = new FastaReader();
-        reader.readFasta(inputFile);
+        FastaToMidi converter = new FastaToMidi();
+        converter.convertFastaToMidi(inputFile);
 
         // dit moet nog gedaan worden TODO
         //LettersToNumbers;
