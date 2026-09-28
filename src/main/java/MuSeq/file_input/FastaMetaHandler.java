@@ -1,4 +1,4 @@
-package MuSeq.inputhandler;
+package MuSeq.file_input;
 
 
 /**

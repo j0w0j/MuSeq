@@ -1,5 +1,6 @@
-package MuSeq.inputhandler;
+package MuSeq.Interface;
 
+import MuSeq.file_input.FastaReader;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -12,7 +13,7 @@ import picocli.CommandLine.Parameters;
 @Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
         subcommands = {Sing.class, CommandLine.HelpCommand.class},
         description = "vet coole description voor MuSeq")
-public class InputHandler {
+public class Interface {
 
 }
 
@@ -60,5 +61,11 @@ class Sing implements Runnable {
         // print voor nu alleen het bestand naar de terminal TODO dit weghalen/vervangen uiteindelijk
         FastaReader reader = new FastaReader();
         reader.readFasta(inputFile);
+
+        // dit moet nog gedaan worden TODO
+        //LettersToNumbers;
+        //NumberToNote;
+        //NoteToMidi;
+        //Synthesizer;
     }
 }

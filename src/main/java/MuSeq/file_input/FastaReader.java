@@ -1,4 +1,4 @@
-package MuSeq.inputhandler;
+package MuSeq.file_input;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,7 +11,7 @@ import java.io.IOException;
  * https://www.w3schools.com/java/java_bufferedreader.asp
  */
 public class FastaReader {
-    void readFasta(String filepath) {
+    public void readFasta(String filepath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
             String codonsToConvert = "";
