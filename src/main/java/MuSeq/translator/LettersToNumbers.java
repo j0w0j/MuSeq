@@ -24,7 +24,7 @@ public class LettersToNumbers {
      */
 
 
-    public ArrayList codonTranslate(String codon) {
+    public ArrayList<Integer> codonTranslate(String codon) {
         HashMap<String, Integer> nucleotideValues = new HashMap<String, Integer>();
         nucleotideValues.put("A", 2);
         nucleotideValues.put("C", 1);

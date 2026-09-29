@@ -1,21 +1,26 @@
 package MuSeq.file_input;
 
+import MuSeq.translator.LettersToNumbers;
+import MuSeq.translator.NumberToNote;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
  * Contains a method to convert FASTA files to MIDI files.
  */
-public class FastaToMidi {
+public class FastaToMidiNotes {
     /**
      * Reads a FASTA file, converts it from nucleotides to MIDI characters,
      * and then writes it to a MIDI file.
      * @param filepath: path to the FASTA file to read, as String.
      */
-    public void convertFastaToMidi(String filepath) {
+    public ArrayList<Integer> convertFastaToMidiNotes(String filepath) {
         // https://www.w3schools.com/java/java_bufferedreader.asp
+        ArrayList<Integer> midiNotes = new ArrayList<Integer>();
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
             String codonsToConvert = "";
@@ -46,9 +51,21 @@ public class FastaToMidi {
                 for (int i = 0; i < iterateAmount; i++) {
                     // check if current section of the line is long enough (>=9)
                     if (i*9+9 < line.length()) {
-                        codonsToConvert = line.substring(i*9, i*9+9);
-                        // TODO hier zou dan code moeten komen (translator en output classes methodes) om het om te zetten naar nummers en uiteindelijk naar MIDI??
-                        System.out.println(codonsToConvert); // test printje TODO dit vervangen met code wat daadwerklijk iets doet
+                        codonsToConvert = line.substring(i*9, i*9+9).toUpperCase();
+
+                        System.out.println(codonsToConvert); // test printje TODO
+
+                        //first class resulting in 3 numbers
+                        LettersToNumbers lettersToNumbers = new LettersToNumbers();
+                        ArrayList<Integer> codonInt = lettersToNumbers.codonTranslate(codonsToConvert);
+                        System.out.println("het getal gemaakt is " + codonInt);
+
+                        //second class resulting in 3 new numbers
+                        NumberToNote numberToNote = new NumberToNote();
+                        ArrayList<Integer> codonNote = numberToNote.devideNumbers(codonInt);
+                        System.out.println(codonNote);
+
+                        midiNotes.addAll(codonNote);
                     }
                     // if current section of the line is not long enough, get a smaller piece (<9).
                     // this will be added to the start of the next line instead
@@ -62,6 +79,7 @@ public class FastaToMidi {
             //  bijvoorbeeld error voor als het bestand ontbreekt of als bestand geen (valide) fasta is.
             System.out.println("Error reading file.");
         }
+        return midiNotes;
     }
 }
 

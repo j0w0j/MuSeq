@@ -1,10 +1,12 @@
 package MuSeq.Interface;
 
-import MuSeq.file_input.FastaToMidi;
+import MuSeq.file_input.FastaToMidiNotes;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+
+import java.util.ArrayList;
 
 
 /**
@@ -60,8 +62,9 @@ class Sing implements Runnable {
         System.out.println("input: " + inputFile);
 
         // print voor nu alleen het bestand naar de terminal TODO dit weghalen/vervangen uiteindelijk
-        FastaToMidi converter = new FastaToMidi();
-        converter.convertFastaToMidi(inputFile);
+        FastaToMidiNotes converter = new FastaToMidiNotes();
+        ArrayList<Integer> midiNotes = converter.convertFastaToMidiNotes(inputFile);
+        System.out.println(midiNotes); // test printje
 
         // dit moet nog gedaan worden TODO
         //LettersToNumbers;
