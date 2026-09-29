@@ -1,20 +1,16 @@
-package MuSeq;
-
-import MuSeq.Interface.Interface;
+import MuSeq.outputhandler.WriteMidi;
 import picocli.CommandLine;
 
-
-
 public class Main {
-    static void main(String[] args) {
+    public static void main(String[] args) {
+        // array wiht notes
+        int[] myMelody = {60, 62, 64, 60}; // C, D, E, C
 
-//        int[] randomNumbers = {60, 62, 64, 65, 67};
-//
-//        int exitCode = new CommandLine(new WriteMidi(randomNumbers)).execute(args);
-//        System.exit(exitCode);
-//        ArrayList pitchNumber = numberToNote.calculatePitch(codonInt);
-      
-        int exitCode = new CommandLine(new Interface()).execute(args);
-        System.exit(exitCode);
+        WriteMidi midiCommand = new WriteMidi(myMelody);
+
+        // commando picocli
+        int exitCode = new CommandLine(midiCommand).execute(args);
+
+        System.out.println("exit" + exitCode);
     }
 }
