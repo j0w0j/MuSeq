@@ -4,7 +4,6 @@ import MuSeq.outputhandler.WriteMidi;
 import picocli.CommandLine;
 import MuSeq.translator.LettersToNumbers;
 import MuSeq.translator.NumberToNote;
-
 import java.util.ArrayList;
 
 
@@ -28,11 +27,8 @@ public class Main {
         int exitCode = new CommandLine(new WriteMidi(randomNumbers)).execute(args);
         System.exit(exitCode);
 //        ArrayList pitchNumber = numberToNote.calculatePitch(codonInt);
-
-
-
-
-
-
+      
+        int exitCode = new CommandLine(new Interface()).execute(args);
+        System.exit(exitCode);
     }
 }
