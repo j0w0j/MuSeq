@@ -16,6 +16,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+tasks.shadowJar { // voor in de jar
+    manifest {
+        attributes["Main-Class"] = "MuSeq.Main"
+    }
+}
 
 tasks.test {
     useJUnitPlatform()
