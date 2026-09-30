@@ -14,8 +14,7 @@ import java.util.ArrayList;
  */
 public class FastaToMidiNotes {
     /**
-     * Reads a FASTA file, converts it from nucleotides to MIDI characters,
-     * and then writes it to a MIDI file.
+     * Reads a FASTA file and converts it from nucleotides to MIDI notes (integers).
      * @param filepath: path to the FASTA file to read, as String.
      */
     public ArrayList<Integer> convertFastaToMidiNotes(String filepath) {

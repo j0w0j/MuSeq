@@ -1,12 +1,16 @@
 package MuSeq.Interface;
 
+import MuSeq.file_input.MetadataGetter;
 import MuSeq.file_input.FastaToMidiNotes;
+import MuSeq.outputhandler.Synthesizer;
+import MuSeq.outputhandler.WriteMidi;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -61,15 +65,23 @@ class Sing implements Runnable {
         System.out.println("output: " + outputFile);
         System.out.println("input: " + inputFile);
 
-        // print voor nu alleen het bestand naar de terminal TODO dit weghalen/vervangen uiteindelijk
+        // make list of midi notes
         FastaToMidiNotes converter = new FastaToMidiNotes();
         ArrayList<Integer> midiNotes = converter.convertFastaToMidiNotes(inputFile);
-        System.out.println(midiNotes); // test printje
+        System.out.println(midiNotes); // test printje TODO
 
-        // dit moet nog gedaan worden TODO
-        //LettersToNumbers;
-        //NumberToNote;
-        //NoteToMidi;
-        //Synthesizer;
+        // get metadata from list of midi notes
+        MetadataGetter metaGetter = new MetadataGetter();
+        // amount n is the amount of notes/integers that is used as metadata
+        Integer[] midiMetadata = metaGetter.getMetadata(midiNotes, 15);
+        System.out.println(Arrays.toString(midiMetadata)); // test printje TODO
+        System.out.println(midiNotes); // test printje TODO
+
+        // TODO functie die midi bestand schrijft?
+        //  input is ArrayList<Integer>
+        WriteMidi writeMidi = new WriteMidi(new int[] {1,2,3,4,5,6});
+
+        // TODO Synthesizer doet nu nog niks
+        Synthesizer synthesizer = new Synthesizer();
     }
 }
