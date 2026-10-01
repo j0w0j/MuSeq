@@ -54,7 +54,7 @@ public class WriteMidi implements Callable<Integer> {
                 onMessage.setMessage(ShortMessage.NOTE_ON, 0, noteNumber, 93); // kanaal 0, noot, velocity (volume) 93
                 track.add(new MidiEvent(onMessage, currentTick));
 
-                // 2. Note OFF
+                // Note OFF
                 ShortMessage offMessage = new ShortMessage();
                 offMessage.setMessage(ShortMessage.NOTE_OFF, 0, noteNumber, 0);
                 track.add(new MidiEvent(offMessage, currentTick + duration));
