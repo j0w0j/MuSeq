@@ -61,7 +61,7 @@ public class NumberToNote {
      */
     int calculateVolume(int codonNumber){
 
-        int volumeNumber = codonNumber * 40;
+        int volumeNumber = codonNumber + 40;
         return volumeNumber;
     }
 

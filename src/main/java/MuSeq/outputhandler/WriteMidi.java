@@ -1,45 +1,73 @@
 package MuSeq.outputhandler;
 
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
+import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.concurrent.Callable;
 
-@Command(name = "write-midi", mixinStandardHelpOptions = true, description = "Write MIDI data in file")
-public class WriteMidi implements Callable<Integer> {
+public class WriteMidi {
 
-    // user can use -f to write file with custom path name and file name
-    @Option(names = {"-writemidi", "--file"}, description = "Name Outputfile and path", defaultValue = "output/output.txt")
-    private File outputFile;
-
+    private File outputFile = new File("output/output.mid");
     private final int[] numbers;
 
     public WriteMidi(int[] numbers) {
         this.numbers = numbers;
     }
 
-    @Override
-    public Integer call() throws Exception {
-        if (outputFile == null) {
-            // if user gives no path/filename
-            outputFile = new File("output/output.txt");
+    public WriteMidi(int[] numbers, String customPath) {
+        this.numbers = numbers;
+        if (customPath != null && !customPath.isEmpty()) {
+            this.outputFile = new File(customPath);
         }
+    }
 
-        // use NoteToMidiChar class
-        NoteToMidiChar converter = new NoteToMidiChar();
-        String midiString = converter.convertNumberToMidiChar(numbers);
-
+    public int writeMidiFile() {
         try {
             if (outputFile.getParentFile() != null) {
                 outputFile.getParentFile().mkdirs();
             }
 
-            Files.writeString(outputFile.toPath(), midiString);
-            System.out.println("Succes! The MIDI file is written. " + outputFile.getName());
+            Sequence sequence = new Sequence(Sequence.PPQ, 480);
+            Track track = sequence.createTrack();
+
+            // Set tempo: 120 BPM
+            MetaMessage tempoMessage = new MetaMessage();
+            byte[] tempoData = new byte[] { 0x07, (byte) 0xA1, 0x20 };
+            tempoMessage.setMessage(0x51, tempoData, 3);
+            track.add(new MidiEvent(tempoMessage, 0));
+
+
+            long currentTick = 0;
+            int duration = 480; //length quarter note
+
+
+            // create the melody, wordt nog aangepast
+            for (int i = 0; i < numbers.length; i++) {
+                int noteNumber = numbers[i];
+
+                // note ON
+                ShortMessage onMessage = new ShortMessage();
+                onMessage.setMessage(ShortMessage.NOTE_ON, 0, noteNumber, 93);
+                track.add(new MidiEvent(onMessage, currentTick));
+
+                // note off
+                ShortMessage offMessage = new ShortMessage();
+                offMessage.setMessage(ShortMessage.NOTE_OFF, 0, noteNumber, 0);
+                track.add(new MidiEvent(offMessage, currentTick + duration));
+
+                // go to next tick
+                currentTick += duration;
+            }
+
+            // write output to midifile to correct path:D
+            MidiSystem.write(sequence, 1, outputFile);
+
+            System.out.println("Succes! The MIDI file is written. " + outputFile.getPath());
         } catch (IOException e) {
             System.err.println("Oops, something went wrong with writing your file! " + e.getMessage());
+            return 1;
+        } catch (Exception e) {
+            System.err.println("Oops, something went wrong with MIDI data! " + e.getMessage());
+            e.printStackTrace();
             return 1;
         }
 
