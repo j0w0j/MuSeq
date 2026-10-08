@@ -1,4 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
@@ -19,7 +18,7 @@
 <h3 align="center">MuSeq</h3>
 
   <p align="center">
-    How does a cow sound? You would say "moo" yeahh.. thats not what we mean, we wanted to know the sound DNA makes!  
+    An awesome tool to turn DNA into music!
     <br />
     <a href="https://github.com/j0w0j/MuSeq"><strong>Explore the docs »</strong></a>
     <br />
@@ -49,36 +48,62 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#usage--quick-start">Usage / Quick Start</a></li>
   </ol>
 </details>
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+## About The Project:
+How does a cow sound? You would say "moo" yeahh.. thats not what we mean, we wanted to know the sound DNA makes!
+<br><br>
+**MuSeq** is an interactive tool that bridges the gap between bioinformatics and audio/composing skills. Instead of looking at endless "boring" lines of genetic sequences, MuSeq translates and lets you translate real DNA sequence into playable (maybe) customized music.
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/j0w0j/MuSeq)
+### Key Features & Benefits:
+- not sure about all features yet!
+- will come later
 
-Here's a blank template to get started: Infinitely scalable, feature-rich and beautiful templates are rare. Here is why you should use this project:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-* Your project description goes here.
-* Highlight key features and benefits.
+### Built With:
+- [![Java][Java-shield]][Java-url]
+- [![Gradle][Gradle-shield]][Gradle-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+## Getting Started:
 
-- [![Next][Next.js]][Next-url]
-
-- [![React][React.js]][React-url]
-
-- [![Vue][Vue.js]][Vue-url]
+### Prerequisites:
+Make sure you have Java installed on your machine:
+* Java JDK (26 or higher)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Installation:
+Follow these steps to install MuSeq:
+
+**1.Clone the repository**
+```bash
+   git clone [https://github.com/j0w0j/MuSeq.git](https://github.com/j0w0j/MuSeq.git)
+```
+**2. Go to the project folder**
+```bash
+cd MuSeq
+```
+**3. Build project with Gradle**
+```bash
+gradle build 
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Usage / Quick Start:
+You can use the tool with the build gradle compiled JAR file:
+```bash
+java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar --input input.fasta --output output.wav
+```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [contributors-shield]: https://img.shields.io/github/contributors/j0w0j/MuSeq.svg?style=for-the-badge
@@ -94,3 +119,7 @@ Here's a blank template to get started: Infinitely scalable, feature-rich and be
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/jouw_linkedin_gebruikersnaam
 [product-screenshot]: README_img/screenshot.png
+[Java-shield]: https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white
+[Java-url]: https://www.oracle.com/java/
+[Gradle-shield]: https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white
+[Gradle-url]: https://gradle.org/
