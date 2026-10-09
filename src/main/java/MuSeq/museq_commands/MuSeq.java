@@ -1,7 +1,7 @@
-package MuSeq.Interface;
+package MuSeq.museq_commands;
 
 import MuSeq.file_input.MetadataGetter;
-import MuSeq.file_input.FastaToMidiNotes;
+import MuSeq.file_input.FastaToMidiNotesConverter;
 import MuSeq.outputhandler.Synthesizer;
 import MuSeq.outputhandler.WriteMidi;
 import picocli.CommandLine;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
         subcommands = {Sing.class, CommandLine.HelpCommand.class},
         description = "vet coole description voor MuSeq")
-public class Interface {
+public class MuSeq {
 
 }
 
@@ -32,6 +32,7 @@ public class Interface {
 class Sing implements Runnable {
 
     // ALL OPTIONS
+    // TODO goeie default waarden instellen
 
     @Option(names = {"-i", "--instrument"}, description = "Instrument name")
     String instrument = "";
@@ -58,6 +59,7 @@ class Sing implements Runnable {
     @Override
     public void run() {
         // als testje print het nu alle opties TODO dit weghalen uiteindelijk
+        System.out.println("Options:");
         System.out.println("instrument: " + instrument);
         System.out.println("bpm: " + bpm);
         System.out.println("chromosome: " + chromosomeNumber);
@@ -66,16 +68,17 @@ class Sing implements Runnable {
         System.out.println("input: " + inputFile);
 
         // make list of midi notes
-        FastaToMidiNotes converter = new FastaToMidiNotes();
+        FastaToMidiNotesConverter converter = new FastaToMidiNotesConverter();
         ArrayList<Integer> midiNotes = converter.convertFastaToMidiNotes(inputFile);
-        System.out.println(midiNotes); // test printje TODO
 
         // get metadata from list of midi notes
         MetadataGetter metaGetter = new MetadataGetter();
         // amount n is the amount of notes/integers that is used as metadata
         Integer[] midiMetadata = metaGetter.getMetadata(midiNotes, 15);
-        System.out.println(Arrays.toString(midiMetadata)); // test printje TODO
-        System.out.println(midiNotes); // test printje TODO
+
+        System.out.println("\nOUTPUT:"); // test printje TODO dit weghalen uiteindelijk
+        System.out.println("midiMetadata: " + Arrays.toString(midiMetadata)); // test printje TODO dit weghalen uiteindelijk
+        System.out.println("midiNotes: " + midiNotes); // test printje TODO dit weghalen uiteindelijk
 
         // TODO functie die midi bestand schrijft?
         //  input is ArrayList<Integer>

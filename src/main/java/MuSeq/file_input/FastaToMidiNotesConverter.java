@@ -12,13 +12,15 @@ import java.util.regex.Pattern;
 
 
 /**
- * Contains a method to convert FASTA files to MIDI files.
+ * Contains 1 method to read a FASTA file (using the BufferedReader),
+ * and return and ArrayList<Integer> of converted midi notes (from codons).
  */
-public class FastaToMidiNotes {
+public class FastaToMidiNotesConverter {
     /**
      * Reads a FASTA file and converts it from nucleotides to MIDI notes (integers).
      *
      * @param filepath: path to the FASTA file to read, as String.
+     * @return ArrayList<Integer> of converted midi notes (from codons).
      */
     public ArrayList<Integer> convertFastaToMidiNotes(String filepath) {
         // https://www.w3schools.com/java/java_bufferedreader.asp
@@ -30,7 +32,7 @@ public class FastaToMidiNotes {
             // read fasta file line by line (non-empty lines only)
             while ((line = br.readLine()) != null) {
 
-                line = fastaLineHandler(line, codonsToConvert);
+                line = handleLineFromFasta(line, codonsToConvert);
                 // skip empty or header lines
                 if (line == null) {
                     continue;
@@ -39,8 +41,6 @@ public class FastaToMidiNotes {
                 // get amount of times line needs to be iterated over, to be split up into codons
                 // this is rounded up, so last codonsToConvert is most likely not of length 9
                 int iterateAmount = (int) Math.ceil((double) line.length() / 9);
-
-                System.out.println(line); // test printje TODO dit weghalen
 
                 // iterate over each line to split up into sections 9 nucleotides (3 codons)
                 for (int i = 0; i < iterateAmount; i++) {
@@ -70,17 +70,17 @@ public class FastaToMidiNotes {
     }
 
     /**
-     * Handles a line from the input FASTA file.
-     * Also adds unused nucleotides from previous line to the beginning of the current line.
-     * Leading and trailing space removed from each line and converts all to uppercase.
-     * Empty or header lines return null.
-     * Raises and error if input is not valid FASTA format.
+     * Handles a line from the input FASTA file:
+     *  - Adds unused nucleotides from previous line to the beginning of the current line.
+     *  - Leading and trailing space removed from each line and converts all to uppercase.
+     *  - Empty or header lines return null.
+     *  - Raises and error if input is not valid FASTA format.
      *
      * @param line            Current line from the input FASTA file, as String.
      * @param codonsToConvert Unused nucleotides from the previous line of the input FASTA file, as String.
      * @return null for empty or header lines, or a new line as String.
      */
-    private String fastaLineHandler(String line, String codonsToConvert) {
+    private String handleLineFromFasta(String line, String codonsToConvert) {
         // remove leading and trailing space (similar to python's .strip())
         line = line.trim().toUpperCase();
 
@@ -110,17 +110,15 @@ public class FastaToMidiNotes {
      * @return ArrayList of integers (used as Midi data).
      */
     private ArrayList<Integer> convertCodonsToMidi(String codonsToConvert) {
-        System.out.println(codonsToConvert); // test printje TODO
 
         //first class resulting in 3 numbers
         LettersToNumbers lettersToNumbers = new LettersToNumbers();
         ArrayList<Integer> codonInt = lettersToNumbers.codonTranslate(codonsToConvert);
-        System.out.println("het getal gemaakt is " + codonInt);
 
         //second class resulting in 3 new numbers
         NumberToNote numberToNote = new NumberToNote();
         ArrayList<Integer> codonNote = numberToNote.devideNumbers(codonInt);
-        System.out.println(codonNote);
+
         return codonNote;
     }
 
