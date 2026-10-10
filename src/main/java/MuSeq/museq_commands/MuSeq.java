@@ -37,7 +37,7 @@ class Sing implements Runnable {
     String instrument = "";
 
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
-    int bpm = -1;
+    int bpm = 120;
 
     @Option(names = {"-c", "--chr"}, description = "Specific chromosome by number to convert to MIDI")
     int chromosomeNumber = -1;

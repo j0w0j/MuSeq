@@ -50,7 +50,7 @@ public class NumberToNote {
      */
     int calculateLenght(int codonNumber){
 
-        int tempoNumber = codonNumber * 2;
+        int tempoNumber = codonNumber * 30;
         return tempoNumber;
     }
 
@@ -61,7 +61,7 @@ public class NumberToNote {
      */
     int calculateVolume(int codonNumber){
 
-        int volumeNumber = codonNumber + 40;
+        int volumeNumber = codonNumber * 2;
         return volumeNumber;
     }
 

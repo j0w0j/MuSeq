@@ -37,16 +37,17 @@ public class WriteMidi {
 
 
             long currentTick = 0;
-            int duration = 480; //length quarter note
+            int duration = 0;         // 480; //length quarter note
 
 
             // create the melody, wordt nog aangepast
-            for (int i = 0; i < numbers.length; i++) {
+            for (int i = 0; i < numbers.length; i = i + 3) {
                 int noteNumber = numbers[i];
+                duration = numbers[i + 1];
 
                 // note ON
                 ShortMessage onMessage = new ShortMessage();
-                onMessage.setMessage(ShortMessage.NOTE_ON, 0, noteNumber, 93);
+                onMessage.setMessage(ShortMessage.NOTE_ON, 0, noteNumber, numbers[i + 2]);
                 track.add(new MidiEvent(onMessage, currentTick));
 
                 // note off
