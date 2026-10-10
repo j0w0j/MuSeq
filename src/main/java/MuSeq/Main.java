@@ -1,31 +1,15 @@
 package MuSeq;
 
-import MuSeq.translator.LettersToNumbers;
-import MuSeq.translator.NumberToNote;
-
-import java.util.ArrayList;
-
+import MuSeq.museq_commands.MuSeq;
+import MuSeq.error_handling.PrintExceptionMessageHandler;
+import picocli.CommandLine;
 
 public class Main {
-    static void main() {
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new MuSeq())
+                .setExecutionExceptionHandler(new PrintExceptionMessageHandler())
+                .execute(args);
 
-        // testing codon
-        String codon1 = "UUUGGGAAA";
-
-        //first class resulting in 3 numbers
-        LettersToNumbers lettersToNumbers = new LettersToNumbers();
-        ArrayList codonInt = lettersToNumbers.codonTranslate(codon1);
-        System.out.println("het getal gemaakt is " + codonInt);
-
-        //second class resulting in 3 new numbers
-        NumberToNote numberToNote = new NumberToNote();
-        System.out.println(numberToNote.devideNumbers(codonInt));
-//        ArrayList pitchNumber = numberToNote.calculatePitch(codonInt);
-
-
-
-
-
-
+        System.exit(exitCode);
     }
 }

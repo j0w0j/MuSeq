@@ -20,7 +20,7 @@ public class NumberToNote {
      * @return the 3 transformed numbers in a ArrayList
      */
 
-    public ArrayList devideNumbers(ArrayList codonNumbers){
+    public ArrayList<Integer> devideNumbers(ArrayList<Integer> codonNumbers){
         ArrayList<Integer> pitchLengthVolume = new ArrayList<Integer>();
         int pitch = calculatePitch((Integer) codonNumbers.get(0));
         int length = calculateLenght((Integer) codonNumbers.get(1));
@@ -61,7 +61,7 @@ public class NumberToNote {
      */
     int calculateVolume(int codonNumber){
 
-        int volumeNumber = codonNumber * 40;
+        int volumeNumber = codonNumber + 40;
         return volumeNumber;
     }
 
