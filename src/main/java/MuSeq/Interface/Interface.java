@@ -1,8 +1,6 @@
     package MuSeq.Interface;
 
     import MuSeq.file_input.FastaToMidiNotes;
-    import MuSeq.translator.NumberToNote;
-    import MuSeq.translator.LettersToNumbers;
     import MuSeq.outputhandler.WriteMidi;
     import picocli.CommandLine;
     import picocli.CommandLine.Command;
