@@ -9,6 +9,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -55,8 +56,15 @@ public class MuSeq implements Runnable{
         System.out.println("input: " + inputFile);
 
         FastaToMidiNotesConverter converter = new FastaToMidiNotesConverter();
+
         // read fasta file and make ArrayList of integers (midi notes)
-        ArrayList<Integer> midiNotes = converter.convertFastaToMidiNotes(inputFile);
+        ArrayList<Integer> midiNotes = null;
+        try {
+            midiNotes = converter.convertFastaToMidiNotes(inputFile);
+        } catch (IOException e) {
+            // if file could not be read
+            throw new RuntimeException(e);
+        }
 
         // get metadata from list of midi notes
         MetadataGetter metaGetter = new MetadataGetter();

@@ -4,6 +4,7 @@ import MuSeq.translator.LettersToNumbers;
 import MuSeq.translator.NumberToNote;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * Contains 1 method to read a FASTA file (using the BufferedReader),
+ * Contains 1 public method to read a FASTA file (using the BufferedReader),
  * and return and ArrayList<Integer> of converted midi notes (from codons).
  */
 public class FastaToMidiNotesConverter {
@@ -22,7 +23,7 @@ public class FastaToMidiNotesConverter {
      * @param filepath: path to the FASTA file to read, as String.
      * @return ArrayList<Integer> of converted midi notes (from codons).
      */
-    public ArrayList<Integer> convertFastaToMidiNotes(String filepath) {
+    public ArrayList<Integer> convertFastaToMidiNotes(String filepath) throws IOException {
         // https://www.w3schools.com/java/java_bufferedreader.asp
         ArrayList<Integer> midiNotes = new ArrayList<Integer>();
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
@@ -33,6 +34,7 @@ public class FastaToMidiNotesConverter {
             while ((line = br.readLine()) != null) {
 
                 line = handleLineFromFasta(line, codonsToConvert);
+
                 // skip empty or header lines
                 if (line == null) {
                     continue;
@@ -45,7 +47,7 @@ public class FastaToMidiNotesConverter {
                 // iterate over each line to split up into sections 9 nucleotides (3 codons)
                 for (int i = 0; i < iterateAmount; i++) {
                     // check if current section of the line is long enough (>=9)
-                    if (i * 9 + 9 < line.length()) {
+                    if (i * 9 + 9 <= line.length()) {
                         codonsToConvert = line.substring(i * 9, i * 9 + 9);
 
                         // convert the codons
@@ -61,21 +63,24 @@ public class FastaToMidiNotesConverter {
                     }
                 }
             }
+        } catch (FileNotFoundException e) {
+            // specifically if the file could not be found
+            throw new FileNotFoundException("Input file could not be found: " + filepath);
         } catch (IOException e) {
-            // TODO dit is nu nog een hele generieke error, misschien meerdere errors toevoegen zodat het duidelijker is wat er misgaat
-            //  bijvoorbeeld error voor als het bestand ontbreekt of als bestand geen (valide) fasta is.
-            System.out.println("Error reading file.");
+            // for other errors that might occur
+            throw new IOException("Error reading file: " + filepath);
         }
         return midiNotes;
     }
 
     /**
      * Handles a line from the input FASTA file:
-     *  - Adds unused nucleotides from previous line to the beginning of the current line.
-     *  - Leading and trailing space removed from each line and converts all to uppercase.
-     *  - Empty or header lines return null.
-     *  - Raises and error if input is not valid FASTA format.
-     *
+     * <ul>
+     *     <li>Adds unused nucleotides from previous line to the beginning of the current line.</li>
+     *     <li>Leading and trailing space removed from each line and converts all to uppercase.</li>
+     *     <li>Empty or header lines return null.</li>
+     *     <li>Raises and error if input is not valid FASTA format.</li>
+     * </ul>
      * @param line            Current line from the input FASTA file, as String.
      * @param codonsToConvert Unused nucleotides from the previous line of the input FASTA file, as String.
      * @return null for empty or header lines, or a new line as String.
@@ -124,9 +129,9 @@ public class FastaToMidiNotesConverter {
 
     /**
      * Check if a line is a valid FASTA format.
-     * Raises an error if not.
      *
      * @param line FASTA line to check, as String.
+     * @return true if the line is invalid, false if the line is valid.
      */
     private boolean containsInvalidFastaFormat(String line) {
         // the pattern matches any character that is NOT A, C, G, T or U.
