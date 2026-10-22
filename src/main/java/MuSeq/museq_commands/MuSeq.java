@@ -14,22 +14,12 @@ import java.util.ArrayList;
 
 /**
  * Documentatie van de MuSeq TODO
- */
-@Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
-        subcommands = {Sing.class, CommandLine.HelpCommand.class},
-        description = "vet coole description voor MuSeq")
-public class MuSeq {
-
-}
-
-/**
-* Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
+ * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
  * TODO misschien optie toevoegen voor synthizer, of deze wel of niet gebruikt moet worden?
  */
-@Command(name = "sing", mixinStandardHelpOptions = true,
-        description = "vet coole description voor MuSeq sing")
-class Sing implements Runnable {
-
+@Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
+        description = "vet coole description voor MuSeq")
+public class MuSeq implements Runnable{
     // ALL OPTIONS
     // TODO goeie default waarden instellen
 
