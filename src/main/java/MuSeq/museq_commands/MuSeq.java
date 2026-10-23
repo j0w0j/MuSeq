@@ -1,16 +1,13 @@
 package MuSeq.museq_commands;
 
-import MuSeq.file_input.MetadataGetter;
-import MuSeq.file_input.FastaToMidiNotesConverter;
-import MuSeq.outputhandler.Synthesizer;
+import MuSeq.file_input.FastaReader;
+import MuSeq.model.MidiData;
 import MuSeq.outputhandler.WriteMidi;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 /**
@@ -55,23 +52,23 @@ public class MuSeq implements Runnable{
         System.out.println("output: " + outputFile);
         System.out.println("input: " + inputFile);
 
-        FastaToMidiNotesConverter converter = new FastaToMidiNotesConverter();
+        FastaReader fastaReader = new FastaReader();
 
-        // read fasta file and make ArrayList of integers (midi notes)
-        ArrayList<Integer> midiNotes = null;
+        // MidiData stores MidiNotes and MidiMetadata
+        MidiData midiData = new MidiData();
+        // read fasta file. MidiData converts the FASTA to MIDI notes.
         try {
-            midiNotes = converter.convertFastaToMidiNotes(inputFile);
+            fastaReader.readFasta(inputFile, midiData);
         } catch (IOException e) {
             // if file could not be read
             throw new RuntimeException(e);
         }
 
         // get metadata from list of midi notes
-        MetadataGetter metaGetter = new MetadataGetter();
         // amount n is the amount of notes/integers that is used as metadata
-        Integer[] midiMetadata = metaGetter.getMetadata(midiNotes, 15);
+        midiData.setMidiMetadata(15);
 
-        int[] midiNotesArray = midiNotes.stream().mapToInt(i -> i).toArray();
+        int[] midiNotesArray = midiData.getMidiNotes().stream().mapToInt(i -> i).toArray();
 
         WriteMidi midiCommand = new WriteMidi(midiNotesArray, outputFile);
         int exitCode = midiCommand.writeMidiFile();
