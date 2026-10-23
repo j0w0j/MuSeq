@@ -66,9 +66,9 @@ public class MuSeq implements Runnable{
 
         // get metadata from list of midi notes
         // amount n is the amount of notes/integers that is used as metadata
-        midiData.setMidiMetadata(15);
+        midiData.setMidiMetadata(5);
 
-        int[] midiNotesArray = midiData.getMidiNotes().stream().mapToInt(i -> i).toArray();
+        int[] midiNotesArray = midiData.getMidiNotesPitch().stream().mapToInt(i -> i).toArray();
 
         WriteMidi midiCommand = new WriteMidi(midiNotesArray, outputFile);
         int exitCode = midiCommand.writeMidiFile();

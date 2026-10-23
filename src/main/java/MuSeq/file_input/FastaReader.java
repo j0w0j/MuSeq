@@ -29,7 +29,7 @@ public class FastaReader {
             // read fasta file line by line (non-empty lines only)
             while ((line = br.readLine()) != null) {
 
-                line = processLineFromFasta(line);
+                line = validateLineFromFasta(line);
 
                 // skip empty or header lines
                 if (line == null) {
@@ -38,7 +38,6 @@ public class FastaReader {
 
                 // MidiData converts Fasta line to Midi data and stores it
                 midiData.addFromFastaLine(line);
-
             }
         } catch (FileNotFoundException e) {
             // specifically if the file could not be found
@@ -50,7 +49,7 @@ public class FastaReader {
     }
 
     /**
-     * Processes a line from the input FASTA file:
+     * Validate a line from the input FASTA file:
      * <ul>
      *     <li>Leading and trailing space removed from each line and converts all to uppercase.</li>
      *     <li>Empty or header lines return null.</li>
@@ -59,7 +58,7 @@ public class FastaReader {
      * @param line            Current line from the input FASTA file, as String.
      * @return null for empty or header lines, or a new line as String.
      */
-    private String processLineFromFasta(String line) {
+    private String validateLineFromFasta(String line) {
         // remove leading and trailing space (similar to python's .strip())
         line = line.trim().toUpperCase();
 
