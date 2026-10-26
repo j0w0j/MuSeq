@@ -10,6 +10,7 @@ public class ExpectedFastaLines {
 
     private ArrayList<String> testValid1 = new ArrayList<String>();
     private ArrayList<String> testValid2 = new ArrayList<String>();
+    private ArrayList<String> testValid3 = new ArrayList<String>();
 
 
     public void setTestValid1() {
@@ -42,6 +43,19 @@ public class ExpectedFastaLines {
         testValid2.replaceAll(String::toUpperCase);
     }
 
+    public void setTestValid3() {
+        testValid3.add("ACGTUACGU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACGTU");
+        testValid3.add("ACAGUACAGTU");
+        // Source - https://stackoverflow.com/a/35395355
+        testValid3.replaceAll(String::toUpperCase);
+    }
+
     public ArrayList<String> getTestValid1() {
         return testValid1;
     }
@@ -50,9 +64,14 @@ public class ExpectedFastaLines {
         return testValid2;
     }
 
+    public ArrayList<String> getTestValid3() {
+        return testValid3;
+    }
+
 
     public ExpectedFastaLines(){
         setTestValid1();
         setTestValid2();
+        setTestValid3();
     }
 }

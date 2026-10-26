@@ -35,7 +35,8 @@ class FastaReaderTest {
         ExpectedFastaLines expectedLines = new ExpectedFastaLines();
         return Stream.of(
                 Arguments.of("src/test/test_files/test_valid1.fasta", expectedLines.getTestValid1()),
-                Arguments.of("src/test/test_files/test_valid2.fasta", expectedLines.getTestValid2())
+                Arguments.of("src/test/test_files/test_valid2.fasta", expectedLines.getTestValid2()),
+                Arguments.of("src/test/test_files/test_valid3.fasta", expectedLines.getTestValid3())
         );
     }
 
