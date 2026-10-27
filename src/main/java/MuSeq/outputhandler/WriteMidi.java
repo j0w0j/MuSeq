@@ -22,6 +22,11 @@ public class WriteMidi {
 
     public int writeMidiFile() {
         try {
+            if (outputFile.exists()) {
+                System.err.println("File already exists: " + outputFile.getPath());
+                // return 2 if filename already exists
+                return 2;
+            }
             if (outputFile.getParentFile() != null) {
                 outputFile.getParentFile().mkdirs();
             }
