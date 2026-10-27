@@ -52,6 +52,7 @@ public class ExpectedFastaLines {
         testValid3.add("ACGTU");
         testValid3.add("ACGTU");
         testValid3.add("ACAGUACAGTU");
+        testValid3.add("AAAAAAAAAAAAAAAAAAAAAA");
         // Source - https://stackoverflow.com/a/35395355
         testValid3.replaceAll(String::toUpperCase);
     }

@@ -6,6 +6,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,24 +27,30 @@ public class FastaReader {
      * @param midiData: Class which stores converts the FASTA to MIDI, and then stores it.
      */
     public void readFasta(String filepath, MidiData midiData) throws IOException {
-        // https://www.w3schools.com/java/java_bufferedreader.asp
-        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
-            String line;
 
-            // read fasta file line by line (non-empty lines only)
-            while ((line = br.readLine()) != null) {
+        try {
+            // if file is large, ask user whether to continue.
+            checkFileSize(filepath, 50 * 1024 * 1024);
 
-                line = validateLineFromFasta(line);
+            // https://www.w3schools.com/java/java_bufferedreader.asp
+            try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+                String line;
 
-                // skip empty or header lines
-                if (line == null) {
-                    continue;
+                // read fasta file line by line (non-empty lines only)
+                while ((line = br.readLine()) != null) {
+
+                    line = validateLineFromFasta(line);
+
+                    // skip empty or header lines
+                    if (line == null) {
+                        continue;
+                    }
+
+                    // MidiData converts Fasta line to Midi data and stores it
+                    midiData.addFromFastaLine(line);
                 }
-
-                // MidiData converts Fasta line to Midi data and stores it
-                midiData.addFromFastaLine(line);
             }
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | NoSuchFileException e) {
             // specifically if the file could not be found
             throw new FileNotFoundException("Input file could not be found: " + filepath);
         } catch (IOException e) {
@@ -55,7 +66,8 @@ public class FastaReader {
      *     <li>Empty or header lines return null.</li>
      *     <li>Raises and error if input is not valid FASTA format.</li>
      * </ul>
-     * @param line            Current line from the input FASTA file, as String.
+     *
+     * @param line Current line from the input FASTA file, as String.
      * @return null for empty or header lines, or a new line as String.
      */
     private String validateLineFromFasta(String line) {
@@ -92,7 +104,7 @@ public class FastaReader {
      *     <li><a href="https://olvtools.com/en/documents/fasta">https://olvtools.com/en/documents/fasta</a></li>
      *     <li><a href="https://en.wikipedia.org/wiki/FASTA_format#Sequence_representation">https://en.wikipedia.org/wiki/FASTA_format#Sequence_representation</a></li>
      *     <li><a href="https://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html">https://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html</a></li>
-     *</ol>
+     * </ol>
      *
      * @param line FASTA line to check, as String.
      * @return true if the line is invalid, false if the line is valid.
@@ -132,6 +144,35 @@ public class FastaReader {
         }
 
         return filteredLine.toString();
+    }
+
+    /**
+     * If the file is above the given size, show the user a warning.
+     * User is prompted to choose whether to proceed or not.
+     *
+     * @param filepath          Path of the file to check.
+     * @param sizeToCompare     File size to compare the given file to.
+     */
+    private void checkFileSize(String filepath, int sizeToCompare) throws IOException {
+        // Source - https://stackoverflow.com/a/8721276
+        Path path = Paths.get(filepath);
+        long fileSize = Files.size(path);
+
+        System.out.println(fileSize);
+        if (fileSize >= sizeToCompare) {
+            Scanner myObj = new Scanner(System.in);
+            System.out.println("This file might be (very) large. Are you sure you want to continue? (y/n)");
+            String userInput = myObj.nextLine().toUpperCase();
+
+            if (userInput.equals("Y")) {
+                return;
+            } else if (userInput.equals("N")) {
+                System.exit(0);
+            } else {
+                System.out.println("Invalid answer. Please answer only y or n.");
+                checkFileSize(filepath, sizeToCompare);
+            }
+        }
     }
 }
 
