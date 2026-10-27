@@ -98,7 +98,7 @@ gradle build
 ## Usage / Quick Start:
 You can use the tool with the build gradle compiled JAR file:
 ```bash
-java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.midi
+java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.mid
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
