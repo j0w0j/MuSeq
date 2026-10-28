@@ -15,6 +15,10 @@ public class MidiData {
 
     private Integer[] midiMetadata;
 
+    // used for translating FASTA to MIDI
+    private LettersToNumbers lettersToNumbers = new LettersToNumbers();
+    private NumberToNote numberToNote = new NumberToNote();
+
     /**
      * Unused nucleotides from the previous line of the input FASTA file.
      */
@@ -22,7 +26,7 @@ public class MidiData {
 
 
     /**
-     * Translate the FASTA line to MIDI notes, and add the MIDI notes to the midiNotes ArrayList.
+     * Translate the FASTA line to MIDI notes, and then add the MIDI notes to the midiNotes ArrayList.
      * @param line Line from the FASTA file, as String.
      */
     public void addFromFastaLine(String line) {
@@ -69,11 +73,9 @@ public class MidiData {
     private ArrayList<Integer> convertCodonsToMidi(String codonsToConvert) {
 
         //first class resulting in 3 numbers
-        LettersToNumbers lettersToNumbers = new LettersToNumbers();
         ArrayList<Integer> codonInt = lettersToNumbers.codonTranslate(codonsToConvert);
 
         //second class resulting in 3 new numbers
-        NumberToNote numberToNote = new NumberToNote();
         ArrayList<Integer> codonNote = numberToNote.devideNumbers(codonInt);
 
         return codonNote;

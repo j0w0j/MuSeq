@@ -4,7 +4,7 @@ package MuSeq.file_input;
 import java.util.ArrayList;
 
 /**
- * Contains a function used to retrieve and remove first n amount of integers/notes from the MidiNotes list.
+ * Contains a function used to retrieve and remove first n amount of integers/notes from each MidiData list.
  * This is later used as Metadata (options such as instrument and bpm) for the MIDI file.
  */
 public class MetadataGetter {
@@ -24,8 +24,8 @@ public class MetadataGetter {
                                  ArrayList<Integer> midiNotesVolume,
                                  int amount) throws IndexOutOfBoundsException{
 
-        // throw error if input list is too small
-        if (amount > midiNotesPitch.size()) {
+        // throw error if input list is too small (meaning no notes remain after metadata extraction).
+        if (midiNotesPitch.size() <= amount) {
             throw new IndexOutOfBoundsException("The input FASTA file is too short to make a song.\nTry a bigger FASTA file.");
         }
 
