@@ -104,27 +104,53 @@ java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.midi
 
 ## Composing with DNA
 
-TODO uitleg over hoe je zelf een liedje zou kunnen schrijven vanuit DNA. 
+If you want to compose music from DNA using this tool, here is what you should know:
 
-Hierin zou denk ik uitleg moeten staan over de translation tables hieronder.
+### Metadata
 
-De eerste zoveel codons worden gebruikt als metadata, dit moet ook duidelijk worden uitgelegd.
-Hierin zou een tabel moeten staan met de beschrijving, bijvoorbeeld:
+The first 10 codons are used as "metadata" for the music. These are used for options such as BPM and instrument. These codons are NOT used as notes for the music.  
+The table below shows which codon(s) are used for which option.
 
-| Property | Codon Number(s) |
+TODO tabel maken, de tabel hieronder is een voorbeeld van wat het zou kunnen zijn.
+
+| Option | Codon Number(s) |
 | ------ | ------ |
 | BPM | 1 |
 | Instrument | 2 and 3 |
 | Iets ander leuks | 4 |
 | etc.. | 4 and 5 |
 
-Eventueel een zelfgemaakt voorbeeld van een kort liedje geschreven met DNA.
+For more information about what each codon translates too, see the Translation Tables section. Here you will find a table for each option.
+
+### Notes
+
+All codons after the metadata section are used for notes. Each note consists of 3 codons:
+
+ - The first codon is used for the pitch of the note. For example codon TTT translates to C2.
+ - The second codon is used for the length/duration of the note. A duration of 480 is equal to a quarter note. TODO meer uitleg?
+ - The third codon is used for the volume of the note. TODO?
+
+For more information about what each codon translates too, see the Translation Tables section. Here you will find a table for each property of a note.
+
+### Additional information
+
+ - Headers (starting with >) are ignored. 
+   - If composing, this can be useful for labeling sections of a song.
+ - Gaps and ambiguous nucleotides are ignored. Only nucleotides A, C, G, T and U are recognized.
+   - Example: Sequence AAANNNTTT---CCCRRR will be read as AAATTTCCC.
+   - For more info, see [this IUPAC nucleotide code table](https://www.bioinformatics.org/sms/iupac.html).
+ - Nucleotide U translates the same as T. 
+   - For example, TTT and UUU both translate to note C2.
+
+### Example 
+
+TODO self made DNA music
 
 ## Translation Tables
 
 ### Metadata
 
-TODO bijvoorbeeld iets als:
+TODO, bijvoorbeeld iets als:
 
 | BPM | Codon |
 | ------ | ------ |
