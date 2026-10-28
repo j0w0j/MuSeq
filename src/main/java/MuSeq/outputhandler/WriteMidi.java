@@ -3,24 +3,39 @@ package MuSeq.outputhandler;
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class WriteMidi {
 
     private File outputFile = new File("output/output.mid");
-    private final int[] numbers;
+    private final List<List<Integer>> notes; // notes [pitch, length in ticks, velocity)
+    private final int bpm;
 
-    public WriteMidi(int[] numbers) {
-        this.numbers = numbers;
+    public WriteMidi(List<List<Integer>> notes, int bpm) {
+        this.notes = notes;
+        this.bpm = bpm;
     }
 
-    public WriteMidi(int[] numbers, String customPath) {
-        this.numbers = numbers;
+    public WriteMidi(List<List<Integer>> notes, String customPath, int bpm) {
+        this.notes = notes;
+        this.bpm = bpm;
         if (customPath != null && !customPath.isEmpty()) {
-            this.outputFile = new File(customPath);
+
+            // add .mid if user did not put it behind the output name
+            if (!customPath.toLowerCase().endsWith(".mid")) {
+                customPath += ".mid";
+            }
+
+            File custom = new File(customPath);
+            // if no path given go to output
+            if (custom.getParentFile() == null) {
+                this.outputFile = new File("output", customPath);
+            } else {
+                this.outputFile = custom;
+            }
         }
     }
-
-    public int writeMidiFile() {
+    public int writeMidiFile () {
         try {
             if (outputFile.exists()) {
                 System.err.println("File already exists: " + outputFile.getPath());
@@ -34,36 +49,40 @@ public class WriteMidi {
             Sequence sequence = new Sequence(Sequence.PPQ, 480);
             Track track = sequence.createTrack();
 
-            // Set tempo: 120 BPM
+            // Set tempo
+            int mpq = 60000000 / bpm;
+            byte[] tempoData = new byte[]{
+                    (byte) ((mpq >> 16) & 0xFF),
+                    (byte) ((mpq >> 8) & 0xFF),
+                    (byte) (mpq & 0xFF)
+            };
+
             MetaMessage tempoMessage = new MetaMessage();
-            byte[] tempoData = new byte[] { 0x07, (byte) 0xA1, 0x20 };
             tempoMessage.setMessage(0x51, tempoData, 3);
             track.add(new MidiEvent(tempoMessage, 0));
 
 
             long currentTick = 0;
-            int duration = 480; //length quarter note
 
-
-            // create the melody, wordt nog aangepast
-            for (int i = 0; i < numbers.length; i++) {
-                int noteNumber = numbers[i];
+            for (List<Integer> note : notes) {
+                int pitch = note.get(0);
+                int duration = note.get(1);   // length in ticks
+                int velocity = note.get(2);   // 0-127
 
                 // note ON
-                ShortMessage onMessage = new ShortMessage();
-                onMessage.setMessage(ShortMessage.NOTE_ON, 0, noteNumber, 93);
-                track.add(new MidiEvent(onMessage, currentTick));
+                ShortMessage on = new ShortMessage();
+                on.setMessage(ShortMessage.NOTE_ON, 0, pitch, velocity);
+                track.add(new MidiEvent(on, currentTick));
 
-                // note off
-                ShortMessage offMessage = new ShortMessage();
-                offMessage.setMessage(ShortMessage.NOTE_OFF, 0, noteNumber, 0);
-                track.add(new MidiEvent(offMessage, currentTick + duration));
+                // note OFF
+                ShortMessage off = new ShortMessage();
+                off.setMessage(ShortMessage.NOTE_OFF, 0, pitch, 0);
+                track.add(new MidiEvent(off, currentTick + duration));
 
-                // go to next tick
+                // next note starts when this one ends, so the lengths define the rhythm
                 currentTick += duration;
             }
 
-            // write output to midifile to correct path:D
             MidiSystem.write(sequence, 1, outputFile);
 
             System.out.println("Succes! The MIDI file is written. " + outputFile.getPath());
@@ -72,10 +91,8 @@ public class WriteMidi {
             return 1;
         } catch (Exception e) {
             System.err.println("Oops, something went wrong with MIDI data! " + e.getMessage());
-            e.printStackTrace();
             return 1;
         }
-
         return 0;
     }
 }

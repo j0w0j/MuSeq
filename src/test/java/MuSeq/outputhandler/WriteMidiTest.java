@@ -5,15 +5,22 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WriteMidiTest {
 
+    // each note: {pitch, length in ticks, velocity}
+    private final List<List<Integer>> notes = List.of(
+            List.of(60, 480, 90),
+            List.of(64, 240, 80),
+            List.of(67, 960, 100)
+    );
+
     @Test
-    // tests if the midi is written
+        // tests if the midi is written
     void testWriteMidiSucces(@TempDir Path tempDir) {
-        int[] notes = {60, 44, 22};
 
         // temp map to not get confused
         File testOutputFile = tempDir.resolve("test_output.mid").toFile();
@@ -29,9 +36,8 @@ public class WriteMidiTest {
     }
 
     @Test
-    // tests if the filename is unique, if not the file wont be written
+        // tests if the filename is unique, if not the file wont be written
     void testDoesMidiExist(@TempDir Path tempDir) {
-        int[] notes = {60, 44, 22};
         File testOutputFile = tempDir.resolve("test_output.mid").toFile();
 
         // 2 possible outcomes:
@@ -48,7 +54,7 @@ public class WriteMidiTest {
     }
 
     @Test
-    // tests if the notes are valid
+        // tests if the notes are valid
     void testValidNotes() {
         // TODO: Dit kom nog
         assertTrue(true, "This test is so cool it will succeed always:D");

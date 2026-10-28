@@ -2,12 +2,15 @@ package MuSeq.museq_commands;
 
 import MuSeq.file_input.FastaReader;
 import MuSeq.model.MidiData;
+import MuSeq.outputhandler.BpmCalculator;
 import MuSeq.outputhandler.WriteMidi;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -64,13 +67,39 @@ public class MuSeq implements Runnable{
             throw new RuntimeException(e);
         }
 
+        int finalBpm;
+        // user did not give bpm
+        if (bpm == -1) {
+            BpmCalculator bpmCalculator = new BpmCalculator(
+                    (ArrayList<Integer>) midiData.getMidiNotesPitch(),
+                    (ArrayList<Integer>) midiData.getMidiNotesLength(),
+                    (ArrayList<Integer>) midiData.getMidiNotesVolume(),
+                    5
+                    // use first 5 of the file for bpm
+            );
+            finalBpm =bpmCalculator.getBpm();
+        // custom bpm
+        } else {
+            finalBpm = bpm;
+        }
+
         // get metadata from list of midi notes
         // int 5 gives metadata list of 15 integers!
-        midiData.setMidiMetadata(5);
+        if (midiData.getMidiNotesPitch().size() > 5) {
+            midiData.setMidiMetadata(5);
 
-        int[] midiNotesArray = midiData.getMidiNotesPitch().stream().mapToInt(i -> i).toArray();
 
-        WriteMidi midiCommand = new WriteMidi(midiNotesArray, outputFile);
+        List<Integer> pitches = midiData.getMidiNotesPitch();
+        List<Integer> lengths = midiData.getMidiNotesLength();
+        List<Integer> volumes = midiData.getMidiNotesVolume();
+
+        // combine pitch, length and volume into one list per note
+        List<List<Integer>> notes = new ArrayList<>();
+        for (int i = 0; i < pitches.size(); i++) {
+            notes.add(List.of(pitches.get(i), lengths.get(i), volumes.get(i)));
+        }
+
+        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm);
         int exitCode = midiCommand.writeMidiFile();
         System.out.println("exit " + exitCode);
     }
