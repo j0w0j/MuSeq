@@ -1,35 +1,25 @@
 package MuSeq.museq_commands;
 
-import MuSeq.file_input.MetadataGetter;
-import MuSeq.file_input.FastaToMidiNotesConverter;
-import MuSeq.outputhandler.Synthesizer;
+import MuSeq.file_input.FastaReader;
+import MuSeq.model.MidiData;
+import MuSeq.outputhandler.BpmCalculator;
 import MuSeq.outputhandler.WriteMidi;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * Documentatie van de MuSeq TODO
+ * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
  */
 @Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
-        subcommands = {Sing.class, CommandLine.HelpCommand.class},
         description = "vet coole description voor MuSeq")
-public class MuSeq {
-
-}
-
-/**
-* Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
- * TODO misschien optie toevoegen voor synthizer, of deze wel of niet gebruikt moet worden?
- */
-@Command(name = "sing", mixinStandardHelpOptions = true,
-        description = "vet coole description voor MuSeq sing")
-class Sing implements Runnable {
-
+public class MuSeq implements Runnable{
     // ALL OPTIONS
     // TODO goeie default waarden instellen
 
@@ -64,18 +54,42 @@ class Sing implements Runnable {
         System.out.println("output: " + outputFile);
         System.out.println("input: " + inputFile);
 
-        FastaToMidiNotesConverter converter = new FastaToMidiNotesConverter();
-        // read fasta file and make ArrayList of integers (midi notes)
-        ArrayList<Integer> midiNotes = converter.convertFastaToMidiNotes(inputFile);
+        FastaReader fastaReader = new FastaReader();
 
-        // get metadata from list of midi notes
-        MetadataGetter metaGetter = new MetadataGetter();
-        // amount n is the amount of notes/integers that is used as metadata
-        Integer[] midiMetadata = metaGetter.getMetadata(midiNotes, 15);
+        // MidiData stores MidiNotes and MidiMetadata
+        MidiData midiData = new MidiData(10);
+        // read fasta file. MidiData converts the FASTA to MIDI notes.
+        try {
+            fastaReader.readFasta(inputFile, midiData);
+        } catch (IOException e) {
+            // if file could not be read
+            throw new RuntimeException(e);
+        }
 
-        int[] midiNotesArray = midiNotes.stream().mapToInt(i -> i).toArray();
+        // list of codons reserved for metadata. see readme: https://github.com/j0w0j/MuSeq#metadata
+        List<Integer> metadata = midiData.getMidiMetadata();
 
-        WriteMidi midiCommand = new WriteMidi(midiNotesArray, outputFile);
+        int finalBpm;
+        // user did not give bpm
+        if (bpm == -1) {
+            BpmCalculator bpmCalculator = new BpmCalculator(metadata.getFirst()); //first codon is for bpm
+            finalBpm =bpmCalculator.getBpm();
+        // custom bpm
+        } else {
+            finalBpm = bpm;
+        }
+
+        List<Integer> pitches = midiData.getMidiNotesPitch();
+        List<Integer> lengths = midiData.getMidiNotesLength();
+        List<Integer> volumes = midiData.getMidiNotesVolume();
+
+        // combine pitch, length and volume into one list per note
+        List<List<Integer>> notes = new ArrayList<>();
+        for (int i = 0; i < pitches.size(); i++) {
+            notes.add(List.of(pitches.get(i), lengths.get(i), volumes.get(i)));
+        }
+
+        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm);
         int exitCode = midiCommand.writeMidiFile();
         System.out.println("exit " + exitCode);
     }
