@@ -45,15 +45,19 @@ public class NumberToNote {
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return note length in MIDI ticks (120 to 1920)
      */
-    int calculateLenght(int codonNumber) {
-        return DURATIONS[codonNumber / 8];   // 0-63 / 8 gives index 0-7
+    int calculateLenght(int codonNumber){
+
+        int tempoNumber = codonNumber * 30;
+        return tempoNumber;
     }
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return velocity between 40 and 103
      */
-    int calculateVolume(int codonNumber) {
-        return codonNumber + 40;
+    int calculateVolume(int codonNumber){
+
+        int volumeNumber = codonNumber * 2;
+        return volumeNumber;
     }
 }
