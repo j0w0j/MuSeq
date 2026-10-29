@@ -5,19 +5,27 @@ import MuSeq.translator.NumberToNote;
 
 import java.util.ArrayList;
 
-import static MuSeq.file_input.MetadataGetter.getMetadata;
-
 public class MidiData {
 
     private ArrayList<Integer> midiNotesPitch = new ArrayList<Integer>();
     private ArrayList<Integer> midiNotesLength = new ArrayList<Integer>();
     private ArrayList<Integer> midiNotesVolume = new ArrayList<Integer>();
 
-    private Integer[] midiMetadata;
+    private final int metadataAmount;
+
+    private ArrayList<Integer> midiMetadata = new ArrayList<Integer>();
 
     // used for translating FASTA to MIDI
     private LettersToNumbers lettersToNumbers = new LettersToNumbers();
     private NumberToNote numberToNote = new NumberToNote();
+
+    /**
+     *
+     * @param metadataAmount Amount of codons reserved for the metadata
+     */
+    public MidiData(int metadataAmount) {
+        this.metadataAmount = metadataAmount;
+    }
 
     /**
      * Unused nucleotides from the previous line of the input FASTA file.
@@ -36,6 +44,49 @@ public class MidiData {
             unusedNucleotides = "";
         }
 
+        if (midiMetadata.size() < metadataAmount) {
+            splitFastaLineIntoMetadata(line);
+        } else {
+            splitFastaLineIntoNotes(line);
+        }
+    }
+
+
+    private void splitFastaLineIntoMetadata(String line) {
+        // split line into sections of maximum 3 nucleotides (1 codon).
+        // iterateAmount is the amount of sections in the line.
+        int iterateAmount = (int) Math.ceil((double) line.length() / 3);
+
+        // iterate over each section.
+        for (int i = 0; i < iterateAmount; i++) {
+
+            // stop adding to metadata if it is full!
+            if (midiMetadata.size() >= metadataAmount) {
+                unusedNucleotides = line.substring(i * 3);
+            }
+
+            // check if current section of the line is long enough (>=9) to be converted.
+            if (i * 3 + 3 <= line.length()) {
+                String codonToConvert = line.substring(i * 3, i * 3 + 3);
+
+                // convert codons to numbers
+                Integer translatedCodon = lettersToNumbers.codonTranslate(codonToConvert).getFirst();
+
+                // add converted codon to metadata.
+                midiMetadata.add(translatedCodon);
+
+            }
+            // if current section of the line is not long enough, get a smaller piece (<9).
+            // this will be added to the start of the next line instead
+            else {
+                unusedNucleotides = line.substring(i * 3);
+            }
+        }
+    }
+
+
+    private void splitFastaLineIntoNotes(String line) {
+
         // split line into sections of maximum 9 nucleotides (3 codons).
         // iterateAmount is the amount of sections in the line.
         int iterateAmount = (int) Math.ceil((double) line.length() / 9);
@@ -53,6 +104,7 @@ public class MidiData {
                 this.midiNotesPitch.add(codonNote.get(0));
                 this.midiNotesLength.add(codonNote.get(1));
                 this.midiNotesVolume.add(codonNote.get(2));
+
             }
             // if current section of the line is not long enough, get a smaller piece (<9).
             // this will be added to the start of the next line instead
@@ -60,9 +112,7 @@ public class MidiData {
                 unusedNucleotides = line.substring(i * 9);
             }
         }
-
     }
-
 
     /**
      * Converts a String of 3 codons (9 nucleotides) to an ArrayList of integers used as Midi data.
@@ -81,18 +131,11 @@ public class MidiData {
         return codonNote;
     }
 
+    public ArrayList<Integer> getMidiMetadata() {
+        if (midiMetadata.size() < metadataAmount) {
+            throw new IllegalArgumentException("The input FASTA file was too short to make a song.\nTry a bigger FASTA file.");
+        }
 
-    /**
-     * Get midi metadata from midinotes.
-     * @param amount First amount of notes to retrieve from the list.
-     *               Each notes consists of 3 integers. (So amount 3 returns list of 9 integers).
-     *               These are removed from the input list.
-     */
-    public void setMidiMetadata(int amount) {
-        midiMetadata = getMetadata(midiNotesPitch, midiNotesLength, midiNotesVolume, amount);
-    }
-
-    public Integer[] getMidiMetadata() {
         return midiMetadata;
     }
 

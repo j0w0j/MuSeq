@@ -17,7 +17,7 @@ class MidiDataTest {
             "ACACACACACGTGCTGATCGATCGTACTAGTCGATCGTAGCTAGCTGATCGATCGTACGTACGTAGCTAGCTAGTGCTAGTCGATCGTACGTAGCTACGTAGC, 11"})
     void testAddFromFastaLine(String line, int expectedNotesAmount) {
 
-        MidiData midiData = new MidiData();
+        MidiData midiData = new MidiData(0);
 
         midiData.addFromFastaLine(line);
 

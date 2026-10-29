@@ -14,6 +14,14 @@ public class FastaReaderLineTester extends MidiData {
 
     private ArrayList<String> lines = new ArrayList<String>();;
 
+    /**
+     *
+     * @param metadataAmount Amount of codons reserved for the metadata
+     */
+    public FastaReaderLineTester(int metadataAmount) {
+        super(metadataAmount);
+    }
+
     public ArrayList<String> getLines() {
         return lines;
     }
