@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static MuSeq.file_input.MetadataGetter.getMetadata;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FastaReaderTest {
@@ -26,7 +25,7 @@ class FastaReaderTest {
     @BeforeEach
     void setup() {
         fastaReader = new FastaReader();
-        readerTester = new FastaReaderLineTester();
+        readerTester = new FastaReaderLineTester(0);
     }
 
 

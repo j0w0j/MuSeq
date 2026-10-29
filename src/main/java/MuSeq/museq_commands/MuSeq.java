@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * Documentatie van de MuSeq TODO
  * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
- * TODO misschien optie toevoegen voor synthizer, of deze wel of niet gebruikt moet worden?
  */
 @Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
         description = "vet coole description voor MuSeq")
@@ -58,7 +57,7 @@ public class MuSeq implements Runnable{
         FastaReader fastaReader = new FastaReader();
 
         // MidiData stores MidiNotes and MidiMetadata
-        MidiData midiData = new MidiData();
+        MidiData midiData = new MidiData(10);
         // read fasta file. MidiData converts the FASTA to MIDI notes.
         try {
             fastaReader.readFasta(inputFile, midiData);
@@ -67,27 +66,18 @@ public class MuSeq implements Runnable{
             throw new RuntimeException(e);
         }
 
+        // list of codons reserved for metadata. see readme: https://github.com/j0w0j/MuSeq#metadata
+        List<Integer> metadata = midiData.getMidiMetadata();
+
         int finalBpm;
         // user did not give bpm
         if (bpm == -1) {
-            BpmCalculator bpmCalculator = new BpmCalculator(
-                    (ArrayList<Integer>) midiData.getMidiNotesPitch(),
-                    (ArrayList<Integer>) midiData.getMidiNotesLength(),
-                    (ArrayList<Integer>) midiData.getMidiNotesVolume(),
-                    5
-                    // use first 5 of the file for bpm
-            );
+            BpmCalculator bpmCalculator = new BpmCalculator(metadata.getFirst()); //first codon is for bpm
             finalBpm =bpmCalculator.getBpm();
         // custom bpm
         } else {
             finalBpm = bpm;
         }
-
-        // get metadata from list of midi notes
-        // int 5 gives metadata list of 15 integers!
-        if (midiData.getMidiNotesPitch().size() > 5) {
-            midiData.setMidiMetadata(5);
-
 
         List<Integer> pitches = midiData.getMidiNotesPitch();
         List<Integer> lengths = midiData.getMidiNotesLength();
