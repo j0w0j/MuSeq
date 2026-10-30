@@ -62,7 +62,8 @@ public class MidiData {
 
             // stop adding to metadata if it is full!
             if (midiMetadata.size() >= metadataAmount) {
-                unusedNucleotides = line.substring(i * 3);
+                splitFastaLineIntoNotes(line.substring(i * 3));
+                return;
             }
 
             // check if current section of the line is long enough (>=9) to be converted.
