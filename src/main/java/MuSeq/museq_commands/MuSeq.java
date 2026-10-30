@@ -23,8 +23,10 @@ public class MuSeq implements Runnable{
     // ALL OPTIONS
     // TODO goeie default waarden instellen
 
+
+    // default piano
     @Option(names = {"-i", "--instrument"}, description = "Instrument name")
-    String instrument = "";
+    int instrument = 0;
 
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
     int bpm = -1;
@@ -89,7 +91,7 @@ public class MuSeq implements Runnable{
             notes.add(List.of(pitches.get(i), lengths.get(i), volumes.get(i)));
         }
 
-        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm);
+        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm, instrument);
         int exitCode = midiCommand.writeMidiFile();
         System.out.println("exit " + exitCode);
     }
