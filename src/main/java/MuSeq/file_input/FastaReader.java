@@ -24,7 +24,7 @@ public class FastaReader {
      * Each line is added to MidiData class, which converts it to MIDI notes.
      *
      * @param filepath: path to the FASTA file to read, as String.
-     * @param midiData: Class which stores converts the FASTA to MIDI, and then stores it.
+     * @param midiData: Class which converts the FASTA to MIDI, and then stores it.
      */
     public void readFasta(String filepath, MidiData midiData) throws IOException {
 
@@ -94,6 +94,10 @@ public class FastaReader {
         return line;
     }
 
+    // matches any character that is NOT IUPAC nucleotide code (from https://www.bioinformatics.org/sms/iupac.html).
+    // matches if it finds at least one character.
+    private Pattern invalidFastaLinePattern = Pattern.compile("[^ACGTURYSWKMBDHVN.-]+");
+
     /**
      * Check if a line is a valid FASTA sequence.
      * A sequence containing a character that is not IUPAC nucleotide code is deemed invalid.
@@ -111,11 +115,13 @@ public class FastaReader {
      */
     private boolean containsInvalidFastaFormat(String line) {
         // matches any character that is NOT IUPAC nucleotide code (from https://www.bioinformatics.org/sms/iupac.html).
-        Pattern pattern = Pattern.compile("[^ACGTURYSWKMBDHVN.-]+");
         // matches if it finds at least one character.
-        Matcher matcher = pattern.matcher(line);
+        Matcher matcher = invalidFastaLinePattern.matcher(line);
         return matcher.find();
     }
+
+    // matches characters A, C, G, T or U. matches if it finds at least one character.
+    private final Pattern validNucleotidesPattern = Pattern.compile("[ACGTU]+");
 
     /**
      * Remove any characters that are NOT A, C, G, T or U.
@@ -124,9 +130,8 @@ public class FastaReader {
      * @return new String. A filtered line with the characters removed. Returns null if no characters remain.
      */
     private String removeAmbiguousNucleotides(String line) {
-        // Matches characters A, C, G, T or U. Must atleast match one or more.
-        Pattern pattern = Pattern.compile("[ACGTU]+");
-        Matcher matcher = pattern.matcher(line);
+        // matches characters A, C, G, T or U. matches if it finds at least one character.
+        Matcher matcher = validNucleotidesPattern.matcher(line);
 
         // empty string builder to append matches to.
         StringBuilder filteredLine = new StringBuilder();
@@ -158,7 +163,6 @@ public class FastaReader {
         Path path = Paths.get(filepath);
         long fileSize = Files.size(path);
 
-        System.out.println(fileSize);
         if (fileSize >= sizeToCompare) {
             Scanner myObj = new Scanner(System.in);
             System.out.println("This file might be (very) large. Are you sure you want to continue? (y/n)");
