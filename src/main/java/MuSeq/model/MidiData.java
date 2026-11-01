@@ -134,7 +134,7 @@ public class MidiData {
 
     public ArrayList<Integer> getMidiMetadata() {
         if (midiMetadata.size() < metadataAmount) {
-            throw new IllegalArgumentException("The input FASTA file was too short to make a song.\nTry a bigger FASTA file.");
+            throw new IllegalArgumentException("The input was too short to make a song.\nTry a bigger FASTA file.");
         }
 
         return midiMetadata;

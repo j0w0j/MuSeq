@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,14 +20,30 @@ import java.util.regex.Pattern;
  * Can read a FASTA file using the BufferedReader.
  */
 public class FastaReader {
+
     /**
      * Reads a FASTA file.
      * Each line is added to MidiData class, which converts it to MIDI notes.
      *
-     * @param filepath: path to the FASTA file to read, as String.
-     * @param midiData: Class which converts the FASTA to MIDI, and then stores it.
+     * @param filepath Path to the FASTA file to read, as String.
+     * @param midiData Class which converts the FASTA to MIDI, and then stores it.
      */
     public void readFasta(String filepath, MidiData midiData) throws IOException {
+        readFasta(filepath, midiData, null);
+    }
+
+
+    /**
+     * Reads a FASTA file.
+     * Each line is added to MidiData class, which converts it to MIDI notes.
+     *
+     * @param filepath Path to the FASTA file to read, as String.
+     * @param midiData Class which converts the FASTA to MIDI, and then stores it.
+     * @param chromosome chromosome ID to check for (e.g. 5, 2L, Y or MT).
+     */
+    public void readFasta(String filepath, MidiData midiData, String chromosome) throws IOException {
+
+        boolean sequenceIsFromSelectedChromosome = false;
 
         try {
             // if file is large, ask user whether to continue.
@@ -36,12 +53,28 @@ public class FastaReader {
             try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
                 String line;
 
-                // read fasta file line by line (non-empty lines only)
+                // read fasta file line by line
                 while ((line = br.readLine()) != null) {
+
+                    // remove leading and trailing space (similar to python's .strip())
+                    line = line.trim();
+
+                    // check header lines for chromosome and then skip the line.
+                    if (line.startsWith(">")) {
+                        if (chromosome != null) {
+                            sequenceIsFromSelectedChromosome = containsChromosome(line, chromosome);
+                        }
+                        continue;
+                    }
+
+                    // skip the line if it is not from the user selected chromosome
+                    if (chromosome != null & !sequenceIsFromSelectedChromosome) {
+                        continue;
+                    }
 
                     line = validateLineFromFasta(line);
 
-                    // skip empty or header lines
+                    // skip empty lines
                     if (line == null) {
                         continue;
                     }
@@ -60,22 +93,20 @@ public class FastaReader {
     }
 
     /**
-     * Validate a line from the input FASTA file:
+     * Validate a line from the input FASTA file. For each line:
      * <ul>
-     *     <li>Leading and trailing space removed from each line and converts all to uppercase.</li>
-     *     <li>Empty or header lines return null.</li>
+     *     <li>Converts all characters to uppercase.</li>
      *     <li>Raises and error if input is not valid FASTA format.</li>
+     *     <li>Remove all ambiguous nucleotides, so only A, C, G, T or U remain.</li>
      * </ul>
      *
      * @param line Current line from the input FASTA file, as String.
-     * @return null for empty or header lines, or a new line as String.
+     * @return A new line as String. Empty lines return null.
      */
     private String validateLineFromFasta(String line) {
-        // remove leading and trailing space (similar to python's .strip())
-        line = line.trim();
 
-        // return null for empty or header lines
-        if (line.startsWith(">") | line.isEmpty()) {
+        // return null for empty lines
+        if (line.isEmpty()) {
             return null;
         }
 
@@ -88,7 +119,7 @@ public class FastaReader {
                     "Line:\n" + line);
         }
 
-        // Remove any characters that are NOT A, C, G, T or U.
+        // Remove any characters that are NOT A, C, G, T or U. (Returns null if no characters remain.)
         line = removeAmbiguousNucleotides(line);
 
         return line;
@@ -96,7 +127,7 @@ public class FastaReader {
 
     // matches any character that is NOT IUPAC nucleotide code (from https://www.bioinformatics.org/sms/iupac.html).
     // matches if it finds at least one character.
-    private Pattern invalidFastaLinePattern = Pattern.compile("[^ACGTURYSWKMBDHVN.-]+");
+    private final Pattern invalidFastaLinePattern = Pattern.compile("[^ACGTURYSWKMBDHVN.-]+");
 
     /**
      * Check if a line is a valid FASTA sequence.
@@ -114,8 +145,6 @@ public class FastaReader {
      * @return true if the line is invalid, false if the line is valid.
      */
     private boolean containsInvalidFastaFormat(String line) {
-        // matches any character that is NOT IUPAC nucleotide code (from https://www.bioinformatics.org/sms/iupac.html).
-        // matches if it finds at least one character.
         Matcher matcher = invalidFastaLinePattern.matcher(line);
         return matcher.find();
     }
@@ -130,7 +159,6 @@ public class FastaReader {
      * @return new String. A filtered line with the characters removed. Returns null if no characters remain.
      */
     private String removeAmbiguousNucleotides(String line) {
-        // matches characters A, C, G, T or U. matches if it finds at least one character.
         Matcher matcher = validNucleotidesPattern.matcher(line);
 
         // empty string builder to append matches to.
@@ -149,6 +177,22 @@ public class FastaReader {
         }
 
         return filteredLine.toString();
+    }
+
+    /**
+     * Check if a FASTA header contains a specific chromosome.
+     * @param header Header line to check for chromosome
+     * @param chromosome chromosome ID to check for (e.g. 5, 22, Y or MT).
+     * @return true if the chromosome is found. false if it is not found.
+     */
+    private boolean containsChromosome(String header, String chromosome) {
+
+        // pattern matches chromosome ID, NOT followed by any number
+        // example: chromosome 3R will match chromosome 3, but chromosome 1 will not match chromosome 12.
+        String chromosomePatternString = String.format("chromosome %s[^0-9]", chromosome);
+        Pattern chromosomePattern = Pattern.compile(chromosomePatternString, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = chromosomePattern.matcher(header);
+        return matcher.find();
     }
 
     /**
