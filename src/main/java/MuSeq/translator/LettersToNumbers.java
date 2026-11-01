@@ -12,14 +12,14 @@ import java.util.HashMap;
  */
 public class LettersToNumbers {
 
-    private final HashMap<String, Integer> nucleotideValues = new HashMap<String, Integer>();
+    private final HashMap<Character, Integer> nucleotideValues = new HashMap<Character, Integer>();
 
     public LettersToNumbers(){
-        nucleotideValues.put("A", 2);
-        nucleotideValues.put("C", 1);
-        nucleotideValues.put("G", 3);
-        nucleotideValues.put("T", 0); //in case fasta is dna
-        nucleotideValues.put("U", 0); //in case fasta in rna
+        nucleotideValues.put('A', 2);
+        nucleotideValues.put('C', 1);
+        nucleotideValues.put('G', 3);
+        nucleotideValues.put('T', 0); //in case fasta is dna
+        nucleotideValues.put('U', 0); //in case fasta in rna
     }
 
     /**
@@ -32,15 +32,13 @@ public class LettersToNumbers {
      * @param codon a string containing 9 nucleotide letters capatalized
      * @return a ArrayList containing 3 numbers each representing a codon
      */
-
-
     public ArrayList<Integer> codonTranslate(String codon) {
 
         ArrayList<Integer> codonNumericValues = new ArrayList<Integer>();
         int codonNumericValue = 200;
 
         for (int i = 0; i < codon.length(); i++) {
-            String letter = Character.toString(codon.charAt(i)); //extracting singular letter to work with
+            char letter = codon.charAt(i); //extracting singular letter to work with
             if (i % 3 == 0){ //each new codon starts here
                 int firstNumber = 64/4 * nucleotideValues.get(letter); //translating letter to number
                 codonNumericValue = 0;
