@@ -25,7 +25,7 @@ public class WriteMidiTest {
         // temp map to not get confused
         File testOutputFile = tempDir.resolve("test_output.mid").toFile();
 
-        WriteMidi writer = new WriteMidi(notes, testOutputFile.getPath());
+        WriteMidi writer = new WriteMidi(notes, 120);
 
         int exitCode = writer.writeMidiFile();
 
@@ -43,12 +43,12 @@ public class WriteMidiTest {
         // 2 possible outcomes:
 
         // returns 0 if file does not exist and the file can be written
-        int firstExitCode = new WriteMidi(notes, testOutputFile.getPath()).writeMidiFile();
+        int firstExitCode = new WriteMidi(notes, 120).writeMidiFile();
         assertEquals(0, firstExitCode);
         assertTrue(testOutputFile.exists(), "The MIDI file should exist after writing");
 
         // if the file already exist return 2 and file will not be written
-        int secondExitCode = new WriteMidi(notes, testOutputFile.getPath()).writeMidiFile();
+        int secondExitCode = new WriteMidi(notes, 120).writeMidiFile();
 
         assertEquals(2, secondExitCode, "File cannot be written because it already exists!");
     }

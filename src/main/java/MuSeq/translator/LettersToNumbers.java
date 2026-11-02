@@ -53,9 +53,6 @@ public class LettersToNumbers {
                 codonNumericValue += thirdNumber;
                 codonNumericValues.add(codonNumericValue); //final codonnumber added
             }
-            else { //errorhandling
-                System.err.println("codon to long error");
-            }
         }
         return codonNumericValues;
     }

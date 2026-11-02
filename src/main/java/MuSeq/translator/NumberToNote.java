@@ -34,18 +34,27 @@ public class NumberToNote {
      * @return number between 36 and 99, representing notes C3 through D#8 in a MIDI file
      */
     private int calculatePitch(int codonNumber) {
-        return codonNumber + 36;
+        if (codonNumber <= 63) {return codonNumber + 36;}
+        else throw new IllegalArgumentException(codonNumber + " is bigger than 63");
+
     }
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return note length in MIDI ticks (30 to 1920)
      */
-    private int calculateLenght(int codonNumber){ return (codonNumber + 1) * 30; }
+    private int calculateLenght(int codonNumber){
+        if (codonNumber <= 63) {return (codonNumber + 1) * 30;}
+        else throw new IllegalArgumentException(codonNumber + " is bigger than 63");
+        }
+
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return velocity between 0 and 126
      */
-    private int calculateVolume(int codonNumber){ return codonNumber * 2; }
+    private int calculateVolume(int codonNumber){
+        if (codonNumber <= 63) {return codonNumber * 2; }
+        else throw new IllegalArgumentException(codonNumber + " is bigger than 63");
+        }
 }
