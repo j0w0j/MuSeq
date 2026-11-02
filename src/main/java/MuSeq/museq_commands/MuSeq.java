@@ -13,23 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- *
- * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
- */
 @Command(name = "MuSeq", version = "1.0", mixinStandardHelpOptions = true,
         description = "Translate your dna or rna into a melody")
+
+/**
+ * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
+ */
 public class MuSeq implements Runnable{
-    // ALL OPTIONS
-    //
 
-
+    /**
+     * all possible commandline arguments and their description
+     */
     // default piano
-    @Option(names = {"-i", "--instrument"}, description = "Instrument number standard per MIDI")
+    @Option(names = {"-i", "--instrument"}, description = "Instrument number standard per MIDI between 1-128 (default 1 = piano)")
     int instrument = 1;
 
-    @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
-    int bpm = 120;
+    @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm) if not specified, it will be calculated using the inputfile")
+    int bpm = -1;
 
     @Option(names = {"-c", "--chr"}, description = "Specific chromosome to convert to MIDI")
     String chromosome;
@@ -37,15 +37,17 @@ public class MuSeq implements Runnable{
     @Option(names = {"-g", "--gene"}, description = "Specific gene by gene ID to convert to MIDI")
     String geneID = "";
 
-    @Option(names = {"-o", "--output"}, description = "Name of the output MIDI file")
+    @Option(names = {"-o", "--output"}, description = "Name of the output MIDI file. Filepath including filename ending with .mid. File cannot already exist.")
     String outputFile = "";
 
     // INPUT FASTA FILE
 
-    @Parameters(paramLabel = "Input FASTA file", description = "Input FASTA file to convert to MIDI")
+    @Parameters(paramLabel = "Input FASTA file", description = "Filepath to input FASTA file to convert to MIDI")
     String inputFile = "";
 
-    // SING FUNCTIONALITY
+    /**
+     * excuting using user input
+     */
     @Override
     public void run() {
         // als testje print het nu alle opties TODO dit weghalen uiteindelijk

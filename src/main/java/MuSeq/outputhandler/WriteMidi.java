@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Writes all created midi data into the output file
+ */
 public class WriteMidi {
 
     private File outputFile = new File("output/output.mid");
@@ -18,6 +21,10 @@ public class WriteMidi {
         this.instrument = 0;
     }
 
+    /**
+     * Makes output file name given user input
+     *
+     */
     public WriteMidi(List<List<Integer>> notes, String customPath, int bpm, int instrument) {
         this.notes = notes;
         this.bpm = bpm;
@@ -38,6 +45,11 @@ public class WriteMidi {
             }
         }
     }
+
+    /**
+     * Creates midi file and write created midi data into that file
+     * @return 0 if everything went well, 1 or 2 if an error occurred
+     */
     public int writeMidiFile () {
         try {
             if (outputFile.exists()) {

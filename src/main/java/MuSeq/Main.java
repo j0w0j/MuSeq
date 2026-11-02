@@ -4,6 +4,9 @@ import MuSeq.museq_commands.MuSeq;
 import MuSeq.error_handling.PrintExceptionMessageHandler;
 import picocli.CommandLine;
 
+/**
+ * Main class excuting program based on commandline arguments given by user
+ */
 public class Main {
     public static void main(String[] args) {
         int exitCode = new CommandLine(new MuSeq())

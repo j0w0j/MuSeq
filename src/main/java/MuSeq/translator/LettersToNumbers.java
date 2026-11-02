@@ -12,6 +12,9 @@ import java.util.HashMap;
  */
 public class LettersToNumbers {
 
+    /**
+     * translation table nucleotides into numbers
+     */
     private final HashMap<Character, Integer> nucleotideValues = new HashMap<Character, Integer>();
 
     public LettersToNumbers(){

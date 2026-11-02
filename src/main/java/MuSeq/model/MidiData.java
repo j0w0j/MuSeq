@@ -5,10 +5,10 @@ import MuSeq.translator.NumberToNote;
 
 import java.util.ArrayList;
 
-/**
- * This class .......
- */
 
+/**
+ * This class generates the midi data using the streamed fasta file line
+ */
 public class MidiData {
 
     private ArrayList<Integer> midiNotesPitch = new ArrayList<Integer>();
@@ -55,7 +55,12 @@ public class MidiData {
         }
     }
 
-
+    /**
+     * Per streamed line from the fasta file creates the metadata if the metadata
+     * is full the rest is sent to splitFastaLineIntoNotes to transform them into
+     * notes
+     * @param line a String containing one line of nucleotides from the fasta file
+     */
     private void splitFastaLineIntoMetadata(String line) {
         // split line into sections of maximum 3 nucleotides (1 codon).
         // iterateAmount is the amount of sections in the line.
@@ -90,6 +95,11 @@ public class MidiData {
     }
 
 
+    /**
+     * Splits a line from the fasta file into sets of codons to be used
+     * in the transformation into midi data
+     * @param line String containing one line of nucleotides from fasta file
+     */
     private void splitFastaLineIntoNotes(String line) {
 
         // split line into sections of maximum 9 nucleotides (3 codons).
@@ -120,7 +130,8 @@ public class MidiData {
     }
 
     /**
-     * Converts a String of 3 codons (9 nucleotides) to an ArrayList of integers used as Midi data.
+     * Converts a String of 3 codons (9 nucleotides) to an ArrayList of integers
+     * used as Midi data.
      *
      * @param codonsToConvert String of 3 codons (9 nucleotides).
      * @return ArrayList of integers (used as Midi data).
@@ -136,6 +147,10 @@ public class MidiData {
         return codonNote;
     }
 
+    /**
+     * gets metadata for midi file. Check if file is too small.
+     * @return metadata for midi file
+     */
     public ArrayList<Integer> getMidiMetadata() {
         if (midiMetadata.size() < metadataAmount) {
             throw new IllegalArgumentException("The input was too short to make a song.\nTry a bigger FASTA file.");
@@ -144,14 +159,26 @@ public class MidiData {
         return midiMetadata;
     }
 
+    /**
+     *
+     * @return translated pitch-number for midi file
+     */
     public ArrayList<Integer> getMidiNotesPitch() {
         return midiNotesPitch;
     }
 
+    /**
+     *
+     * @return translated notelength number for midi file
+     */
     public ArrayList<Integer> getMidiNotesLength() {
         return midiNotesLength;
     }
 
+    /**
+     *
+     * @return translated volume (velocity) number for midi file
+     */
     public ArrayList<Integer> getMidiNotesVolume() {
         return midiNotesVolume;
     }
