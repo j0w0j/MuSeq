@@ -49,17 +49,37 @@
       </ul>
     </li>
     <li><a href="#usage--quick-start">Usage / Quick Start</a></li>
-  </ol>
+    <li><a href="#composing-with-dna">Composing with DNA</a></li>
+      <ul>
+        <li><a href="#metadata">Metadata</a></li>
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#additional-information">Additional information</a></li>
+        <li><a href="#example">Example</a></li>
+      </ul>  
+   <li><a href="#translation-tables">Translation Tables</a></li>
+      <ul>
+        <li><a href="#metadata">Metadata</a></li>
+        <li><a href="#notes">Notes</a></li>
+         <ul>
+          <li><a href="#translationtable">Translationtable</a></li>
+          <li><a href="#calculations">Calculations</a></li>
+         </ul>
+      </ul>
+</ol>
 </details>
 
 ## About The Project:
-How does a cow sound? You would say "moo" yeahh.. thats not what we mean, we wanted to know the sound DNA makes!
+How does a cow sound? You would say "moo" yeahh.. Thats not what we mean, we wanted to know the sound DNA makes!
 <br><br>
-**MuSeq** is an interactive tool that bridges the gap between bioinformatics and audio/composing skills. Instead of looking at endless "boring" lines of genetic sequences, MuSeq translates and lets you translate real DNA sequence into playable (maybe) customized music.
+**MuSeq** is an interactive tool that bridges the gap between bioinformatics and audio/composing skills. 
+Instead of looking at endless "boring" lines of genetic sequences, MuSeq translates and lets you translate real 
+DNA sequence into playable (maybe) customized music.
 
 ### Key Features & Benefits:
-- not sure about all features yet!
-- will come later
+- Works with fasta as file format for the input data
+- Works both with DNA & RNA
+- Output is a MIDI-file which is playable through a wide variety different tools and programs
+- Easy to use, even with little to no bioinformatics background
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -144,7 +164,9 @@ For more information about what each codon translates too, see the Translation T
 
 ### Example 
 
-TODO self made DNA music
+hier moet nog text komen verhaal lalallal
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p> 
 
 ## Translation Tables
 
@@ -167,219 +189,109 @@ TODO, bijvoorbeeld iets als:
 | Bass | TTG |
 
 etc..
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Notes
+The notes are composed using 3 consecutive codons. Each possible is assigned a number, 
+which is translated into either the pitch, volume or length of the note. 
+#### Translationtable
+Depending on whether the data contains DNA or RNA nucleotides all T's 
+can be exchanged for U's. Beneath the table will be an explanation of each calculation
+used to create the different note characteristics per codon.
 
-#### Pitch
+| Codon | Number | Note pitch | Note length | Note volume |
+|-------|:-------|------------|-------------|:------------|
+| TTT   | 0      | C3         | 0           | 0           |
+| TTC   | 1      | C#3        | 30          | 2           |
+| TTA   | 2      | D3         | 60          | 4           |
+| TTG   | 3      | D#3        | 120         | 6           |
+| TCT   | 4      | E3         | 150         | 8           |
+| TCC   | 5      | F3         | 180         | 10          |
+| TCA   | 6      | F#3        | 210         | 12          |
+| TCG   | 7      | G3         | 240         | 14          |
+| TAT   | 8      | G#3        | 270         | 16          |
+| TAC   | 9      | A3         | 300         | 18          |
+| TAA   | 10     | A#3        | 330         | 20          |
+| TAG   | 11     | B3         | 360         | 22          |
+| TGT   | 12     | C4         | 390         | 24          |
+| TGC   | 13     | C#4        | 420         | 26          |
+| TGA   | 14     | D4         | 450         | 28          |
+| TGG   | 15     | D#4        | 480         | 30          |
+| CTT   | 16     | E4         | 510         | 32          |
+| CTC   | 17     | F4         | 540         | 34          |
+| CTA   | 18     | F#4        | 570         | 36          |
+| CTG   | 19     | G4         | 600         | 38          |
+| CCT   | 20     | G#4        | 630         | 40          |
+| CCC   | 21     | A4         | 660         | 42          |
+| CCA   | 22     | A#4        | 690         | 44          |
+| CCG   | 23     | B4         | 720         | 46          |
+| CAT   | 24     | C5         | 750         | 48          |
+| CAC   | 25     | C#5        | 780         | 50          |
+| CAA   | 26     | D5         | 810         | 52          |
+| CAG   | 27     | D#5        | 840         | 54          |
+| CGT   | 28     | E5         | 870         | 56          |
+| CGC   | 29     | F5         | 900         | 58          |
+| CGA   | 30     | F#5        | 930         | 60          |
+| CGG   | 31     | G5         | 960         | 62          |
+| ATT   | 32     | G#5        | 990         | 64          |
+| ATC   | 33     | A5         | 1020        | 66          |
+| ATA   | 34     | A#5        | 1050        | 68          |
+| ATG   | 35     | B5         | 1080        | 70          |
+| ACT   | 36     | C6         | 1110        | 72          |
+| ACC   | 37     | C#6        | 1140        | 74          |
+| ACA   | 38     | D6         | 1170        | 76          |
+| ACG   | 39     | D#6        | 1200        | 78          |
+| AAT   | 40     | E6         | 1230        | 80          |
+| AAC   | 41     | F6         | 1260        | 82          |
+| AAA   | 42     | F#6        | 1290        | 84          |
+| AAG   | 43     | G6         | 1320        | 86          |
+| AGT   | 44     | G#6        | 1350        | 88          |
+| AGC   | 45     | A6         | 1380        | 90          |
+| AGA   | 46     | A#6        | 1410        | 92          |
+| AGG   | 47     | B6         | 1440        | 94          |
+| GTT   | 48     | C7         | 1470        | 96          |
+| GTC   | 49     | C#7        | 1500        | 98          |
+| GTA   | 50     | D7         | 1530        | 100         |
+| GTG   | 51     | D#7        | 1560        | 102         |
+| GCT   | 52     | E7         | 1590        | 104         |
+| GCC   | 53     | F7         | 1620        | 106         |
+| GCA   | 54     | F#7        | 1650        | 108         |
+| GCG   | 55     | G7         | 1680        | 110         |
+| GAT   | 56     | G#7        | 1710        | 112         |
+| GAC   | 57     | A7         | 1740        | 114         |
+| GAA   | 58     | A#7        | 1770        | 116         |
+| GAG   | 59     | B7         | 1800        | 118         |
+| GGT   | 60     | C8         | 1830        | 120         |
+| GGC   | 61     | C#8        | 1860        | 122         |
+| GGA   | 62     | D8         | 1890        | 124         |
+| GGG   | 63     | D#8        | 1920        | 126         |
 
-| Note pitch | Codon |
-| ------ | ------ |
-| C2 | TTT |
-| C#2 | TTC |
-| D2 | TTA |
-| D#2 | TTG |
-| E2 | TCT |
-| F2 | TCC |
-| F#2 | TCA |
-| G2 | TCG |
-| G#2 | TAT |
-| A2 | TAC |
-| A#2 | TAA |
-| B2 | TAG |
-| C3 | TGT |
-| C#3 | TGC |
-| D3 | TGA |
-| D#3 | TGG |
-| E3 | CTT |
-| F3 | CTC |
-| F#3 | CTA |
-| G3 | CTG |
-| G#3 | CCT |
-| A3 | CCC |
-| A#3 | CCA |
-| B3 | CCG |
-| C4 | CAT |
-| C#4 | CAC |
-| D4 | CAA |
-| D#4 | CAG |
-| E4 | CGT |
-| F4 | CGC |
-| F#4 | CGA |
-| G4 | CGG |
-| G#4 | ATT |
-| A4 | ATC |
-| A#4 | ATA |
-| B4 | ATG |
-| C5 | ACT |
-| C#5 | ACC |
-| D5 | ACA |
-| D#5 | ACG |
-| E5 | AAT |
-| F5 | AAC |
-| F#5 | AAA |
-| G5 | AAG |
-| G#5 | AGT |
-| A5 | AGC |
-| A#5 | AGA |
-| B5 | AGG |
-| C6 | GTT |
-| C#6 | GTC |
-| D6 | GTA |
-| D#6 | GTG |
-| E6 | GCT |
-| F6 | GCC |
-| F#6 | GCA |
-| G6 | GCG |
-| G#6 | GAT |
-| A6 | GAC |
-| A#6 | GAA |
-| B6 | GAG |
-| C7 | GGT |
-| C#7 | GGC |
-| D7 | GGA |
-| D#7 | GGG |
+#### Calculations
+Firstly to assign a number to each codon, each letter was assigned a number 0-3. 
+The first letter in the codon was multiplied by a factor of 16, the second by a factor of
+4 and the last by a factor of 1. Making this work similarly to a 
+nucleotide-to-aminoacid-translation-table like shown here below:
+<div align="center">
+  <a href="https://noorsiddiqui.com/what-is-chip-seq-atac-seq/">
+    <img src="README_img/Codon-aminoacid-table.png" alt="Codon to amino acid translation table" width="599" height="341">
+  </a>
 
-#### Length
+This results in each codon having a number between 0 and 63. This number is then used to calculate the other 3 numbers 
+used in a MIDI-file to describe either the pitch, volume (also referred to as velocity) and note length. 64 options
+seemed plenty to us to have as pitch options. We only add 36 to each number to raise the overall pitch 3 full octaves 
+as MIDI has 128 pitch options, and we wanted to use the middle of those, surrounding middle C.
 
-TODO meer uitleg over wat deze waarden zijn.
+Volume also runs from 0-127 and seeing we have exactly half the options, we elected to use a factor 2 for this. 
+This way the full scale is available and used. And a step of 2 is definitely small enough to feel gradual in human
+perception.
 
-| Note length | Codon |
-| ------ | ------ |
-| 0 | TTT |
-| 2 | TTC |
-| 4 | TTA |
-| 6 | TTG |
-| 8 | TCT |
-| 10 | TCC |
-| 12 | TCA |
-| 14 | TCG |
-| 16 | TAT |
-| 18 | TAC |
-| 20 | TAA |
-| 22 | TAG |
-| 24 | TGT |
-| 26 | TGC |
-| 28 | TGA |
-| 30 | TGG |
-| 32 | CTT |
-| 34 | CTC |
-| 36 | CTA |
-| 38 | CTG |
-| 40 | CCT |
-| 42 | CCC |
-| 44 | CCA |
-| 46 | CCG |
-| 48 | CAT |
-| 50 | CAC |
-| 52 | CAA |
-| 54 | CAG |
-| 56 | CGT |
-| 58 | CGC |
-| 60 | CGA |
-| 62 | CGG |
-| 64 | ATT |
-| 66 | ATC |
-| 68 | ATA |
-| 70 | ATG |
-| 72 | ACT |
-| 74 | ACC |
-| 76 | ACA |
-| 78 | ACG |
-| 80 | AAT |
-| 82 | AAC |
-| 84 | AAA |
-| 86 | AAG |
-| 88 | AGT |
-| 90 | AGC |
-| 92 | AGA |
-| 94 | AGG |
-| 96 | GTT |
-| 98 | GTC |
-| 100 | GTA |
-| 102 | GTG |
-| 104 | GCT |
-| 106 | GCC |
-| 108 | GCA |
-| 110 | GCG |
-| 112 | GAT |
-| 114 | GAC |
-| 116 | GAA |
-| 118 | GAG |
-| 120 | GGT |
-| 122 | GGC |
-| 124 | GGA |
-| 126 | GGG |
+Lastly note length is a number between 0 and 1920. The number is multiplied by 30. This makes each note a length of a 
+whole note as the longest option or a sixty-forth note (hemidemisemiquaver) as the shortest. The randomness introduced by
+the input results in differing lengths of notes whom are not interconnected, this results in an absence of pulse or
+feeling of rhythm. We have not been able to introduce time signatures into this as to help with this.
 
-#### Volume
 
-TODO meer uitleg over wat deze waarden zijn.
-
-| Note volume | Codon |
-| ------ | ------ |
-| 40 | TTT |
-| 41 | TTC |
-| 42 | TTA |
-| 43 | TTG |
-| 44 | TCT |
-| 45 | TCC |
-| 46 | TCA |
-| 47 | TCG |
-| 48 | TAT |
-| 49 | TAC |
-| 50 | TAA |
-| 51 | TAG |
-| 52 | TGT |
-| 53 | TGC |
-| 54 | TGA |
-| 55 | TGG |
-| 56 | CTT |
-| 57 | CTC |
-| 58 | CTA |
-| 59 | CTG |
-| 60 | CCT |
-| 61 | CCC |
-| 62 | CCA |
-| 63 | CCG |
-| 64 | CAT |
-| 65 | CAC |
-| 66 | CAA |
-| 67 | CAG |
-| 68 | CGT |
-| 69 | CGC |
-| 70 | CGA |
-| 71 | CGG |
-| 72 | ATT |
-| 73 | ATC |
-| 74 | ATA |
-| 75 | ATG |
-| 76 | ACT |
-| 77 | ACC |
-| 78 | ACA |
-| 79 | ACG |
-| 80 | AAT |
-| 81 | AAC |
-| 82 | AAA |
-| 83 | AAG |
-| 84 | AGT |
-| 85 | AGC |
-| 86 | AGA |
-| 87 | AGG |
-| 88 | GTT |
-| 89 | GTC |
-| 90 | GTA |
-| 91 | GTG |
-| 92 | GCT |
-| 93 | GCC |
-| 94 | GCA |
-| 95 | GCG |
-| 96 | GAT |
-| 97 | GAC |
-| 98 | GAA |
-| 99 | GAG |
-| 100 | GGT |
-| 101 | GGC |
-| 102 | GGA |
-| 103 | GGG |
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

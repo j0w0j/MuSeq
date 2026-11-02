@@ -35,7 +35,7 @@ public class NumberToNote {
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
-     * @return number between 36 and 99, representing notes C2 through D#7 in a MIDI file
+     * @return number between 36 and 99, representing notes C3 through D#8 in a MIDI file
      */
     int calculatePitch(int codonNumber) {
         return codonNumber + 36;
