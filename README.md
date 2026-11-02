@@ -126,6 +126,13 @@ java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.mid
 
 If you want to compose music from DNA using this tool, here is what you should know:
 
+### Fasta file input
+This tool only works on fasta files. Only excepted fasta-symbols are acceptable in input files. But please note that 
+only T(U)ACG are used. The tool ignores all header lines which makes both fasta and multifasta usable. The tool does not 
+make a distinction between the different fasta sequences in a multifasta and as a result only one melody and outputfile will
+be generated.
+
+
 ### Metadata
 
 The first 10 codons are used as "metadata" for the music. These are used for options such as BPM and instrument. These codons are NOT used as notes for the music.  

@@ -14,22 +14,22 @@ import java.util.List;
 
 
 /**
- * Documentatie van de MuSeq TODO
+ *
  * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
  */
 @Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
-        description = "vet coole description voor MuSeq")
+        description = "Translate your dna or rna into a melody")
 public class MuSeq implements Runnable{
     // ALL OPTIONS
-    // TODO goeie default waarden instellen
+    //
 
 
     // default piano
-    @Option(names = {"-i", "--instrument"}, description = "Instrument name")
-    int instrument = 0;
+    @Option(names = {"-i", "--instrument"}, description = "Instrument number standard per MIDI")
+    int instrument = 1;
 
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
-    int bpm = -1;
+    int bpm = 120;
 
     @Option(names = {"-c", "--chr"}, description = "Specific chromosome to convert to MIDI")
     String chromosome;
