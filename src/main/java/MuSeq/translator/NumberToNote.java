@@ -10,10 +10,6 @@ import java.util.ArrayList;
  */
 public class NumberToNote {
 
-    // note lengths in ticks at PPQ = 480:
-    // sixteenth, eighth, dotted eighth, quarter, dotted quarter, half, dotted half, whole
-    private static final int[] DURATIONS = {120, 240, 360, 480, 720, 960, 1440, 1920};
-
     /**
      * Takes the 3 numbers made using the codons and calls the other methods
      * in this class to transform them into the format needed for a MIDI file.
@@ -43,21 +39,13 @@ public class NumberToNote {
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
-     * @return note length in MIDI ticks (120 to 1920)
+     * @return note length in MIDI ticks (0 to 1920)
      */
-    int calculateLenght(int codonNumber){
-
-        int tempoNumber = codonNumber * 30;
-        return tempoNumber;
-    }
+    int calculateLenght(int codonNumber){ return codonNumber * 30; }
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
-     * @return velocity between 40 and 103
+     * @return velocity between 0 and 126
      */
-    int calculateVolume(int codonNumber){
-
-        int volumeNumber = codonNumber * 2;
-        return volumeNumber;
-    }
+    int calculateVolume(int codonNumber){ return codonNumber * 2; }
 }

@@ -10,15 +10,18 @@ public class WriteMidi {
     private File outputFile = new File("output/output.mid");
     private final List<List<Integer>> notes; // notes [pitch, length in ticks, velocity)
     private final int bpm;
+    private final int instrument;
 
     public WriteMidi(List<List<Integer>> notes, int bpm) {
         this.notes = notes;
         this.bpm = bpm;
+        this.instrument = 0;
     }
 
-    public WriteMidi(List<List<Integer>> notes, String customPath, int bpm) {
+    public WriteMidi(List<List<Integer>> notes, String customPath, int bpm, int instrument) {
         this.notes = notes;
         this.bpm = bpm;
+        this.instrument = instrument;
         if (customPath != null && !customPath.isEmpty()) {
 
             // add .mid if user did not put it behind the output name
@@ -48,6 +51,10 @@ public class WriteMidi {
 
             Sequence sequence = new Sequence(Sequence.PPQ, 480);
             Track track = sequence.createTrack();
+
+            ShortMessage instrumentMessage  = new ShortMessage();
+            instrumentMessage.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument,0);
+            track.add(new MidiEvent(instrumentMessage, 0));
 
             // Set tempo
             int mpq = 60000000 / bpm;
