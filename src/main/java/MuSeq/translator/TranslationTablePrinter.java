@@ -16,7 +16,23 @@ public class TranslationTablePrinter {
 
         // METADATA
         translationTable.printInstrumentTable();
+        translationTable.printBpmTable();
+    }
 
+    private void printBpmTable() {
+        TranslationTablePrinter translationTable = new TranslationTablePrinter();
+        LettersToNumbers lettersToNumbers = new LettersToNumbers();
+        int codonNumber;
+        int bpm;
+
+        System.out.println("| Codon | BPM |");
+        System.out.println("| ----- | --- |");
+        for (String codon : getAllPossibleCodons()) {
+            codonNumber = lettersToNumbers.codonTranslate(codon).getFirst();
+            BpmCalculator bpmCalculator = new BpmCalculator(codonNumber);
+            bpm = bpmCalculator.getBpm();
+            System.out.println(String.format("| %s | %d |", codon, bpm));
+        }
     }
 
     private void printInstrumentTable() {

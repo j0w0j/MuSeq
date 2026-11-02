@@ -128,17 +128,15 @@ If you want to compose music from DNA using this tool, here is what you should k
 
 ### Metadata
 
-The first 10 codons are used as "metadata" for the music. These are used for options such as BPM and instrument. These codons are NOT used as notes for the music.  
+The first 10 codons are reserved as "metadata" for the music. These are used for options such as BPM and instrument. These codons are NOT used as notes for the music.  
 The table below shows which codon(s) are used for which option.
-
-TODO tabel maken, de tabel hieronder is een voorbeeld van wat het zou kunnen zijn.
 
 | Option | Codon Number(s) |
 | ------ | ------ |
 | BPM | 1 |
 | Instrument | 2 and 3 |
-| Iets ander leuks | 4 |
-| etc.. | 4 and 5 |
+
+The remaining 7 codons do not have any use currently.
 
 For more information about what each codon translates too, see the Translation Tables section. Here you will find a table for each option.
 
@@ -176,9 +174,78 @@ hier moet nog text komen verhaal lalallal
 
 #### BPM
 
-TODO
+The first codon of the metadata translates to the BPM of the music. 
+
+| Codon | BPM |
+| ----- | --- |
+| TTT | 54 |
+| TTC | 56 |
+| TTA | 58 |
+| TTG | 60 |
+| TCT | 62 |
+| TCC | 64 |
+| TCA | 66 |
+| TCG | 68 |
+| TAT | 70 |
+| TAC | 72 |
+| TAA | 74 |
+| TAG | 76 |
+| TGT | 78 |
+| TGC | 80 |
+| TGA | 82 |
+| TGG | 84 |
+| CTT | 86 |
+| CTC | 88 |
+| CTA | 90 |
+| CTG | 92 |
+| CCT | 94 |
+| CCC | 96 |
+| CCA | 98 |
+| CCG | 100 |
+| CAT | 102 |
+| CAC | 104 |
+| CAA | 106 |
+| CAG | 108 |
+| CGT | 110 |
+| CGC | 112 |
+| CGA | 114 |
+| CGG | 116 |
+| ATT | 118 |
+| ATC | 120 |
+| ATA | 122 |
+| ATG | 124 |
+| ACT | 126 |
+| ACC | 128 |
+| ACA | 130 |
+| ACG | 132 |
+| AAT | 134 |
+| AAC | 136 |
+| AAA | 138 |
+| AAG | 140 |
+| AGT | 142 |
+| AGC | 144 |
+| AGA | 146 |
+| AGG | 148 |
+| GTT | 150 |
+| GTC | 152 |
+| GTA | 154 |
+| GTG | 156 |
+| GCT | 158 |
+| GCC | 160 |
+| GCA | 162 |
+| GCG | 164 |
+| GAT | 166 |
+| GAC | 168 |
+| GAA | 170 |
+| GAG | 172 |
+| GGT | 174 |
+| GGC | 176 |
+| GGA | 178 |
+| GGG | 180 |
 
 #### Instruments
+
+The second AND third codon of the metadata translate to the instrument used for the music. 
 
 | Codons | Instrument number | Instrument |
 | ------ | ----------------- | ---------- |
