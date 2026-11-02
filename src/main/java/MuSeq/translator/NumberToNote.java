@@ -39,9 +39,9 @@ public class NumberToNote {
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
-     * @return note length in MIDI ticks (0 to 1920)
+     * @return note length in MIDI ticks (30 to 1920)
      */
-    int calculateLenght(int codonNumber){ return codonNumber * 30; }
+    int calculateLenght(int codonNumber){ return (codonNumber + 1) * 30; }
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63

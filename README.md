@@ -198,77 +198,81 @@ The notes are composed using 3 consecutive codons. Each possible codon is assign
 which is translated into either the pitch, volume or length of the note, always in that order meaning the first
 of the consecutive codons is always used for pitch etc.
 
-#### Translationtable
+#### Translation table
 Depending on whether the data contains DNA or RNA nucleotides all T's 
 can be exchanged for U's. Beneath the table will be an explanation of each calculation
 used to create the different note characteristics per codon.
+Each codon is represented by a number used in the calculations. Depending on if the codon is
+the first, second or third it will either be translated into the pitch, length or volume. 
+TTT TTT TTT -> note with pitch C3, length 0 and volume 0
+TTT TTC TTA -> note with pitch C3, length 30 and volume 4
 
-| Codon | Number | Note pitch | Note length | Note volume |
-|-------|:-------|------------|-------------|:------------|
-| TTT   | 0      | C3         | 0           | 0           |
-| TTC   | 1      | C#3        | 30          | 2           |
-| TTA   | 2      | D3         | 60          | 4           |
-| TTG   | 3      | D#3        | 120         | 6           |
-| TCT   | 4      | E3         | 150         | 8           |
-| TCC   | 5      | F3         | 180         | 10          |
-| TCA   | 6      | F#3        | 210         | 12          |
-| TCG   | 7      | G3         | 240         | 14          |
-| TAT   | 8      | G#3        | 270         | 16          |
-| TAC   | 9      | A3         | 300         | 18          |
-| TAA   | 10     | A#3        | 330         | 20          |
-| TAG   | 11     | B3         | 360         | 22          |
-| TGT   | 12     | C4         | 390         | 24          |
-| TGC   | 13     | C#4        | 420         | 26          |
-| TGA   | 14     | D4         | 450         | 28          |
-| TGG   | 15     | D#4        | 480         | 30          |
-| CTT   | 16     | E4         | 510         | 32          |
-| CTC   | 17     | F4         | 540         | 34          |
-| CTA   | 18     | F#4        | 570         | 36          |
-| CTG   | 19     | G4         | 600         | 38          |
-| CCT   | 20     | G#4        | 630         | 40          |
-| CCC   | 21     | A4         | 660         | 42          |
-| CCA   | 22     | A#4        | 690         | 44          |
-| CCG   | 23     | B4         | 720         | 46          |
-| CAT   | 24     | C5         | 750         | 48          |
-| CAC   | 25     | C#5        | 780         | 50          |
-| CAA   | 26     | D5         | 810         | 52          |
-| CAG   | 27     | D#5        | 840         | 54          |
-| CGT   | 28     | E5         | 870         | 56          |
-| CGC   | 29     | F5         | 900         | 58          |
-| CGA   | 30     | F#5        | 930         | 60          |
-| CGG   | 31     | G5         | 960         | 62          |
-| ATT   | 32     | G#5        | 990         | 64          |
-| ATC   | 33     | A5         | 1020        | 66          |
-| ATA   | 34     | A#5        | 1050        | 68          |
-| ATG   | 35     | B5         | 1080        | 70          |
-| ACT   | 36     | C6         | 1110        | 72          |
-| ACC   | 37     | C#6        | 1140        | 74          |
-| ACA   | 38     | D6         | 1170        | 76          |
-| ACG   | 39     | D#6        | 1200        | 78          |
-| AAT   | 40     | E6         | 1230        | 80          |
-| AAC   | 41     | F6         | 1260        | 82          |
-| AAA   | 42     | F#6        | 1290        | 84          |
-| AAG   | 43     | G6         | 1320        | 86          |
-| AGT   | 44     | G#6        | 1350        | 88          |
-| AGC   | 45     | A6         | 1380        | 90          |
-| AGA   | 46     | A#6        | 1410        | 92          |
-| AGG   | 47     | B6         | 1440        | 94          |
-| GTT   | 48     | C7         | 1470        | 96          |
-| GTC   | 49     | C#7        | 1500        | 98          |
-| GTA   | 50     | D7         | 1530        | 100         |
-| GTG   | 51     | D#7        | 1560        | 102         |
-| GCT   | 52     | E7         | 1590        | 104         |
-| GCC   | 53     | F7         | 1620        | 106         |
-| GCA   | 54     | F#7        | 1650        | 108         |
-| GCG   | 55     | G7         | 1680        | 110         |
-| GAT   | 56     | G#7        | 1710        | 112         |
-| GAC   | 57     | A7         | 1740        | 114         |
-| GAA   | 58     | A#7        | 1770        | 116         |
-| GAG   | 59     | B7         | 1800        | 118         |
-| GGT   | 60     | C8         | 1830        | 120         |
-| GGC   | 61     | C#8        | 1860        | 122         |
-| GGA   | 62     | D8         | 1890        | 124         |
-| GGG   | 63     | D#8        | 1920        | 126         |
+| Codon | Number |   | Note pitch |   | Note length | Corresponding note |   | Note volume |
+|-------|:-------|:--|------------|:--|-------------|:-------------------|:--|:------------|
+| TTT   | 0      |   | C3         |   | 30          | 1/64               |   | 0           |
+| TTC   | 1      |   | C#3        |   | 60          | 1/32               |   | 2           |
+| TTA   | 2      |   | D3         |   | 90          |                    |   | 4           |
+| TTG   | 3      |   | D#3        |   | 120         | 1/16               |   | 6           |
+| TCT   | 4      |   | E3         |   | 150         |                    |   | 8           |
+| TCC   | 5      |   | F3         |   | 180         |                    |   | 10          |
+| TCA   | 6      |   | F#3        |   | 210         |                    |   | 12          |
+| TCG   | 7      |   | G3         |   | 240         | 1/8                |   | 14          |
+| TAT   | 8      |   | G#3        |   | 270         |                    |   | 16          |
+| TAC   | 9      |   | A3         |   | 300         |                    |   | 18          |
+| TAA   | 10     |   | A#3        |   | 330         |                    |   | 20          |
+| TAG   | 11     |   | B3         |   | 360         |                    |   | 22          |
+| TGT   | 12     |   | C4         |   | 390         |                    |   | 24          |
+| TGC   | 13     |   | C#4        |   | 420         |                    |   | 26          |
+| TGA   | 14     |   | D4         |   | 450         |                    |   | 28          |
+| TGG   | 15     |   | D#4        |   | 480         | 1/4                |   | 30          |
+| CTT   | 16     |   | E4         |   | 510         |                    |   | 32          |
+| CTC   | 17     |   | F4         |   | 540         |                    |   | 34          |
+| CTA   | 18     |   | F#4        |   | 570         |                    |   | 36          |
+| CTG   | 19     |   | G4         |   | 600         |                    |   | 38          |
+| CCT   | 20     |   | G#4        |   | 630         |                    |   | 40          |
+| CCC   | 21     |   | A4         |   | 660         |                    |   | 42          |
+| CCA   | 22     |   | A#4        |   | 690         |                    |   | 44          |
+| CCG   | 23     |   | B4         |   | 720         |                    |   | 46          |
+| CAT   | 24     |   | C5         |   | 750         |                    |   | 48          |
+| CAC   | 25     |   | C#5        |   | 780         |                    |   | 50          |
+| CAA   | 26     |   | D5         |   | 810         |                    |   | 52          |
+| CAG   | 27     |   | D#5        |   | 840         |                    |   | 54          |
+| CGT   | 28     |   | E5         |   | 870         |                    |   | 56          |
+| CGC   | 29     |   | F5         |   | 900         |                    |   | 58          |
+| CGA   | 30     |   | F#5        |   | 930         |                    |   | 60          |
+| CGG   | 31     |   | G5         |   | 960         | 1/2                |   | 62          |
+| ATT   | 32     |   | G#5        |   | 990         |                    |   | 64          |
+| ATC   | 33     |   | A5         |   | 1020        |                    |   | 66          |
+| ATA   | 34     |   | A#5        |   | 1050        |                    |   | 68          |
+| ATG   | 35     |   | B5         |   | 1080        |                    |   | 70          |
+| ACT   | 36     |   | C6         |   | 1110        |                    |   | 72          |
+| ACC   | 37     |   | C#6        |   | 1140        |                    |   | 74          |
+| ACA   | 38     |   | D6         |   | 1170        |                    |   | 76          |
+| ACG   | 39     |   | D#6        |   | 1200        |                    |   | 78          |
+| AAT   | 40     |   | E6         |   | 1230        |                    |   | 80          |
+| AAC   | 41     |   | F6         |   | 1260        |                    |   | 82          |
+| AAA   | 42     |   | F#6        |   | 1290        |                    |   | 84          |
+| AAG   | 43     |   | G6         |   | 1320        |                    |   | 86          |
+| AGT   | 44     |   | G#6        |   | 1350        |                    |   | 88          |
+| AGC   | 45     |   | A6         |   | 1380        |                    |   | 90          |
+| AGA   | 46     |   | A#6        |   | 1410        |                    |   | 92          |
+| AGG   | 47     |   | B6         |   | 1440        |                    |   | 94          |
+| GTT   | 48     |   | C7         |   | 1470        |                    |   | 96          |
+| GTC   | 49     |   | C#7        |   | 1500        |                    |   | 98          |
+| GTA   | 50     |   | D7         |   | 1530        |                    |   | 100         |
+| GTG   | 51     |   | D#7        |   | 1560        |                    |   | 102         |
+| GCT   | 52     |   | E7         |   | 1590        |                    |   | 104         |
+| GCC   | 53     |   | F7         |   | 1620        |                    |   | 106         |
+| GCA   | 54     |   | F#7        |   | 1650        |                    |   | 108         |
+| GCG   | 55     |   | G7         |   | 1680        |                    |   | 110         |
+| GAT   | 56     |   | G#7        |   | 1710        |                    |   | 112         |
+| GAC   | 57     |   | A7         |   | 1740        |                    |   | 114         |
+| GAA   | 58     |   | A#7        |   | 1770        |                    |   | 116         |
+| GAG   | 59     |   | B7         |   | 1800        |                    |   | 118         |
+| GGT   | 60     |   | C8         |   | 1830        |                    |   | 120         |
+| GGC   | 61     |   | C#8        |   | 1860        |                    |   | 122         |
+| GGA   | 62     |   | D8         |   | 1890        |                    |   | 124         |
+| GGG   | 63     |   | D#8        |   | 1920        | 1/1                |   | 126         |
 
 #### Calculations
 Firstly to assign a number to each codon, each letter was assigned a number 0-3. 
@@ -279,6 +283,7 @@ nucleotide-to-aminoacid-translation-table like shown here below:
   <a href="https://noorsiddiqui.com/what-is-chip-seq-atac-seq/">
     <img src="README_img/Codon-aminoacid-table.png" alt="Codon to amino acid translation table" width="599" height="341">
   </a>
+</div>
 
 This results in each codon having a number between 0 and 63. This number is then used to calculate the other 3 numbers 
 used in a MIDI-file to describe either the pitch, volume (also referred to as velocity) and note length. 64 options
