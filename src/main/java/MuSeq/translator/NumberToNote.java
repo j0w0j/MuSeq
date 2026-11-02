@@ -33,7 +33,7 @@ public class NumberToNote {
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return number between 36 and 99, representing notes C3 through D#8 in a MIDI file
      */
-    int calculatePitch(int codonNumber) {
+    private int calculatePitch(int codonNumber) {
         return codonNumber + 36;
     }
 
@@ -41,11 +41,11 @@ public class NumberToNote {
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return note length in MIDI ticks (30 to 1920)
      */
-    int calculateLenght(int codonNumber){ return (codonNumber + 1) * 30; }
+    private int calculateLenght(int codonNumber){ return (codonNumber + 1) * 30; }
 
     /**
      * @param codonNumber 1 number from a codon between 0 and 63
      * @return velocity between 0 and 126
      */
-    int calculateVolume(int codonNumber){ return codonNumber * 2; }
+    private int calculateVolume(int codonNumber){ return codonNumber * 2; }
 }

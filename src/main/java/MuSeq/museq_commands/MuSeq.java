@@ -17,7 +17,7 @@ import java.util.List;
  *
  * Convert a FASTA file containing DNA or RNA sequences to a MIDI file.
  */
-@Command(name = "MuSeq", version = "versie nummer!", mixinStandardHelpOptions = true,
+@Command(name = "MuSeq", version = "1.0", mixinStandardHelpOptions = true,
         description = "Translate your dna or rna into a melody")
 public class MuSeq implements Runnable{
     // ALL OPTIONS

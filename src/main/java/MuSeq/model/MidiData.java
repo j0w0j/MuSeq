@@ -5,6 +5,10 @@ import MuSeq.translator.NumberToNote;
 
 import java.util.ArrayList;
 
+/**
+ * This class .......
+ */
+
 public class MidiData {
 
     private ArrayList<Integer> midiNotesPitch = new ArrayList<Integer>();
