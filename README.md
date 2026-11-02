@@ -173,7 +173,23 @@ were used for the translations.
 
 ### Example 
 
-hier moet nog text komen verhaal lalallal
+To make your own song, or recreate your favorite song. We made a demo and how to write "Steve's Lava Chicken ~ Jack black"
+with DNA!
+
+To try out the demo you can run the test_files/demo.fasta with -tempo 158:
+```bash
+java -jar MuSeq-all.jar test/files/demo.fasta --output demo.mid --tempo 158
+```
+
+**How to compose in MuSeq:**
+1. Look up your favorite song, I would recommend easy sheet music.
+2. Make a .fasta file start your file with >TheNameOfSong
+3. The second line should be 10 characters long, this is the metadata and is used for the bpm, instrument. For this demo the metadata is not used, so we just use random 10 codons, only the second line needs metadata.
+4. The third (second for the other notes) is used for the notes, the sheetmusic reads for the first note A4 the length of the note is 1/8.
+5. To put one note together we take the first 3 codons for the pitch CCC the second 3 codons are used for the length TCG and the last 3 codons are used for the loudness I just took 80 AAT
+6. To add another note, start on a new line with >ThisIsNoteA4 we dont use the header in the code but you can use it as reminders.
+7. Instead of the 10 codons we can write the note on the second line for the notes we make. CCCTCGAAT
+8. That's pretty much it, to play the song run the program and use a midi synthesizer to hear your DNA song!. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p> 
 
