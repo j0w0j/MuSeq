@@ -8,13 +8,61 @@ public class TranslationTablePrinter {
     static void main() {
         TranslationTablePrinter translationTable = new TranslationTablePrinter();
 
+        // NOTES
         for (int i = 0; i < 3; i++) {
-            String[][] table = translationTable.getTranslationTable(i);
-            translationTable.printFormatedTable(table, i);
+            String[][] table = translationTable.getNotesTranslationTable(i);
+            translationTable.printFormatedNotesTable(table, i);
+        }
+
+        // METADATA
+        translationTable.printInstrumentTable();
+
+    }
+
+    private void printInstrumentTable() {
+        TranslationTablePrinter translationTable = new TranslationTablePrinter();
+        LettersToNumbers lettersToNumbers = new LettersToNumbers();
+
+        // codons from TTT TTT to GGG TTT (number 0 to 63)
+        ArrayList<String> instrumentCodons = new ArrayList<String>();
+        ArrayList<Integer> instrumentNumbers = new ArrayList<Integer>();
+        for (String codon : translationTable.getAllPossibleCodons()) {
+            instrumentCodons.add(codon+"TTT");
+            InstrumentCalculator instrumentCalculator = new InstrumentCalculator(
+                    lettersToNumbers.codonTranslate(codon).getFirst(),
+                    lettersToNumbers.codonTranslate("TTT").getFirst()
+            );
+            instrumentNumbers.add(instrumentCalculator.getInstrument());
+        }
+
+        // codons GGA TTC gives number 64
+        instrumentCodons.add("GGATTC");
+        InstrumentCalculator ic = new InstrumentCalculator(
+                lettersToNumbers.codonTranslate("GGA").getFirst(),
+                lettersToNumbers.codonTranslate("TTC").getFirst()
+        );
+        instrumentNumbers.add(ic.getInstrument());
+
+
+        // codons from GGG TTC to GGG GGG (number 65 to 127)
+        for (String codon : translationTable.getAllPossibleCodons()) {
+            // dont add duplicates (specifically GGGTTT)
+            if (instrumentCodons.contains("GGG"+codon)) {
+                continue;
+            }
+            instrumentCodons.add("GGG"+codon);
+            InstrumentCalculator instrumentCalculator = new InstrumentCalculator(
+                    lettersToNumbers.codonTranslate("GGG").getFirst(),
+                    lettersToNumbers.codonTranslate(codon).getFirst()
+            );
+            instrumentNumbers.add(instrumentCalculator.getInstrument());
+        }
+        for (int i = 0; i < instrumentCodons.size(); i++) {
+            System.out.println(String.format("| %s | %d |", instrumentCodons.get(i), instrumentNumbers.get(i)));
         }
     }
 
-    private void printFormatedTable(String[][] table, int noteProperty) {
+    private void printFormatedNotesTable(String[][] table, int noteProperty) {
 
         String[] propertyNames = new String[]{"Note pitch", "Note length", "Note volume"};
 
@@ -61,7 +109,7 @@ public class TranslationTablePrinter {
      * @param notePropertyIndex 0 = pitch, 1 = length, 2 = volume
      * @return
      */
-    private String[][] getTranslationTable(int notePropertyIndex) {
+    private String[][] getNotesTranslationTable(int notePropertyIndex) {
 
         // used for translation
         LettersToNumbers lettersToNumbers = new LettersToNumbers();

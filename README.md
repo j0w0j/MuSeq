@@ -174,23 +174,145 @@ hier moet nog text komen verhaal lalallal
 
 ### Metadata
 
-TODO, bijvoorbeeld iets als:
+#### BPM
 
-| BPM | Codon |
-| ------ | ------ |
-| 0 | TTT |
-| 20 | TTC |
-| 30 | TTA |
-| 40 | TTG |
+TODO
 
-| Instrument | Codon |
-| ------ | ------ |
-| Trompet | TTT |
-| Piano | TTC |
-| Gitaar | TTA |
-| Bass | TTG |
+#### Instruments
 
-etc..
+| Codons | Instrument number | Instrument |
+| ------ | ----------------- | ---------- |
+| TTTTTT | 0 | Acoustic Grand Piano |
+| TTCTTT | 1 | Bright Acoustic Piano |
+| TTATTT | 2 | Electric Grand Piano |
+| TTGTTT | 3 | Honky-tonk Piano |
+| TCTTTT | 4 | Electric Piano 1 |
+| TCCTTT | 5 | Electric Piano 2 |
+| TCATTT | 6 | Harpsichord |
+| TCGTTT | 7 | Clavinet |
+| TATTTT | 8 | Celesta |
+| TACTTT | 9 | Glockenspiel |
+| TAATTT | 10 | Music Box |
+| TAGTTT | 11 | Vibraphone |
+| TGTTTT | 12 | Marimba |
+| TGCTTT | 13 | Xylophone |
+| TGATTT | 14 | Tubular Bells |
+| TGGTTT | 15 | Dulcimer |
+| CTTTTT | 16 | Drawbar Organ |
+| CTCTTT | 17 | Percussive Organ |
+| CTATTT | 18 | Rock Organ |
+| CTGTTT | 19 | Church Organ |
+| CCTTTT | 20 | Reed Organ |
+| CCCTTT | 21 | Accordion |
+| CCATTT | 22 | Harmonica |
+| CCGTTT | 23 | Tango Accordion |
+| CATTTT | 24 | Acoustic Guitar (nylon) |
+| CACTTT | 25 | Acoustic Guitar (steel) |
+| CAATTT | 26 | Electric Guitar (jazz) |
+| CAGTTT | 27 | Electric Guitar (clean) |
+| CGTTTT | 28 | Electric Guitar (muted) |
+| CGCTTT | 29 | Overdriven Guitar |
+| CGATTT | 30 | Distortion Guitar |
+| CGGTTT | 31 | Guitar Harmonics |
+| ATTTTT | 32 | Acoustic Bass |
+| ATCTTT | 33 | Electric Bass (finger) |
+| ATATTT | 34 | Electric Bass (pick) |
+| ATGTTT | 35 | Fretless Bass |
+| ACTTTT | 36 | Slap Bass 1 |
+| ACCTTT | 37 | Slap Bass 2 |
+| ACATTT | 38 | Synth Bass 1 |
+| ACGTTT | 39 | Synth Bass 2 |
+| AATTTT | 40 | Violin |
+| AACTTT | 41 | Viola |
+| AAATTT | 42 | Cello |
+| AAGTTT | 43 | Contrabass |
+| AGTTTT | 44 | Tremolo Strings |
+| AGCTTT | 45 | Pizzicato Strings |
+| AGATTT | 46 | Orchestral Harp |
+| AGGTTT | 47 | Timpani |
+| GTTTTT | 48 | String Ensemble 1 |
+| GTCTTT | 49 | String Ensemble 2 |
+| GTATTT | 50 | Synth Strings 1 |
+| GTGTTT | 51 | Synth Strings 2 |
+| GCTTTT | 52 | Choir Aahs |
+| GCCTTT | 53 | Voice Oohs |
+| GCATTT | 54 | Synth Voice |
+| GCGTTT | 55 | Orchestra Hit |
+| GATTTT | 56 | Trumpet |
+| GACTTT | 57 | Trombone |
+| GAATTT | 58 | Tuba |
+| GAGTTT | 59 | Muted Trumpet |
+| GGTTTT | 60 | French Horn |
+| GGCTTT | 61 | Brass Section |
+| GGATTT | 62 | Synth Brass 1 |
+| GGGTTT | 63 | Synth Brass 2 |
+| GGATTC | 64 | Soprano Sax |
+| GGGTTC | 65 | Alto Sax |
+| GGGTTA | 66 | Tenor Sax |
+| GGGTTG | 67 | Baritone Sax |
+| GGGTCT | 68 | Oboe |
+| GGGTCC | 69 | English Horn |
+| GGGTCA | 70 | Bassoon |
+| GGGTCG | 71 | Clarinet |
+| GGGTAT | 72 | Piccolo |
+| GGGTAC | 73 | Flute |
+| GGGTAA | 74 | Recorder |
+| GGGTAG | 75 | Pan Flute |
+| GGGTGT | 76 | Blown Bottle |
+| GGGTGC | 77 | Shakuhachi |
+| GGGTGA | 78 | Whistle |
+| GGGTGG | 79 | Ocarina |
+| GGGCTT | 80 | Lead 1 (square) |
+| GGGCTC | 81 | Lead 2 (sawtooth) |
+| GGGCTA | 82 | Lead 3 (calliope) |
+| GGGCTG | 83 | Lead 4 (chiff) |
+| GGGCCT | 84 | Lead 5 (charang) |
+| GGGCCC | 85 | Lead 6 (voice) |
+| GGGCCA | 86 | Lead 7 (fifths) |
+| GGGCCG | 87 | Lead 8 (bass + lead) |
+| GGGCAT | 88 | Pad 1 (new age) |
+| GGGCAC | 89 | Pad 2 (warm) |
+| GGGCAA | 90 | Pad 3 (polysynth) |
+| GGGCAG | 91 | Pad 4 (choir) |
+| GGGCGT | 92 | Pad 5 (bowed) |
+| GGGCGC | 93 | Pad 6 (metallic) |
+| GGGCGA | 94 | Pad 7 (halo) |
+| GGGCGG | 95 | Pad 8 (sweep) |
+| GGGATT | 96 | FX 1 (rain) |
+| GGGATC | 97 | FX 2 (soundtrack) |
+| GGGATA | 98 | FX 3 (crystal) |
+| GGGATG | 99 | FX 4 (atmosphere) |
+| GGGACT | 100 | FX 5 (brightness) |
+| GGGACC | 101 | FX 6 (goblins) |
+| GGGACA | 102 | FX 7 (echoes) |
+| GGGACG | 103 | FX 8 (sci-fi) |
+| GGGAAT | 104 | Sitar |
+| GGGAAC | 105 | Banjo |
+| GGGAAA | 106 | Shamisen |
+| GGGAAG | 107 | Koto |
+| GGGAGT | 108 | Kalimba |
+| GGGAGC | 109 | Bagpipe |
+| GGGAGA | 110 | Fiddle |
+| GGGAGG | 111 | Shanai |
+| GGGGTT | 112 | Tinkle Bell |
+| GGGGTC | 113 | Agogo |
+| GGGGTA | 114 | Steel Drums |
+| GGGGTG | 115 | Woodblock |
+| GGGGCT | 116 | Taiko Drum |
+| GGGGCC | 117 | Melodic Tom |
+| GGGGCA | 118 | Synth Drum |
+| GGGGCG | 119 | Reverse Cymbal |
+| GGGGAT | 120 | Guitar Fret Noise |
+| GGGGAC | 121 | Breath Noise |
+| GGGGAA | 122 | Seashore |
+| GGGGAG | 123 | Bird Tweet |
+| GGGGGT | 124 | Telephone Ring |
+| GGGGGC | 125 | Helicopter |
+| GGGGGA | 126 | Applause |
+| GGGGGG | 127 | Gunshot |
+
+The instrument names listed above are retrieved from: https://songen.app/tools/general-midi-instruments/
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Notes
