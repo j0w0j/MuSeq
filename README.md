@@ -146,11 +146,13 @@ For more information about what each codon translates too, see the Translation T
 
 All codons after the metadata section are used for notes. Each note consists of 3 codons:
 
- - The first codon is used for the pitch of the note. For example codon TTT translates to C2.
- - The second codon is used for the length/duration of the note. A duration of 480 is equal to a quarter note. TODO meer uitleg?
- - The third codon is used for the volume of the note. TODO?
+ - The first codon is used for the pitch of the note. For example codon TTT translates to C3.
+ - The second codon is used for the length/duration of the note. A duration of 480 is equal to a quarter note. There is not yet rhythm or time signature implemented here.
+ - The third codon is used for the volume of the note. 
 
-For more information about what each codon translates too, see the Translation Tables section. Here you will find a table for each property of a note.
+For more information about what each codon translates too, see the Translation Tables section. 
+Here you will find a table for each property of a note. Followed by an explanation of which calculations
+were used for the translations.
 
 ### Additional information
 
@@ -160,7 +162,7 @@ For more information about what each codon translates too, see the Translation T
    - Example: Sequence AAANNNTTT---CCCRRR will be read as AAATTTCCC.
    - For more info, see [this IUPAC nucleotide code table](https://www.bioinformatics.org/sms/iupac.html).
  - Nucleotide U translates the same as T. 
-   - For example, TTT and UUU both translate to note C2.
+   - For example, TTT and UUU both translate to note C3.
 
 ### Example 
 
@@ -192,8 +194,10 @@ etc..
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Notes
-The notes are composed using 3 consecutive codons. Each possible is assigned a number, 
-which is translated into either the pitch, volume or length of the note. 
+The notes are composed using 3 consecutive codons. Each possible codon is assigned a number, 
+which is translated into either the pitch, volume or length of the note, always in that order meaning the first
+of the consecutive codons is always used for pitch etc.
+
 #### Translationtable
 Depending on whether the data contains DNA or RNA nucleotides all T's 
 can be exchanged for U's. Beneath the table will be an explanation of each calculation

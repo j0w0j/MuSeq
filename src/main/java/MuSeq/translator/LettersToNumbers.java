@@ -6,7 +6,7 @@ import java.util.HashMap;
 /** This class will take a string of 9 nucleotides and translate them to
  * 3 numbers. Per codon a number will be generated between 0 and 63. It uses
  * the conventional order in most nucleotide-to-aminoacids translate tables.
- * These go from U(or T) to C, to A, to G per letter in de codon. Thus UUU
+ * These go from U(or T) to C, to A, to G per letter in de codon. Thus, UUU
  * is the first option and GGG the last.
  *
  */
@@ -19,7 +19,7 @@ public class LettersToNumbers {
      * The first in steps of 16, the second in steps of 4 and the last
      * in steps of 1.
      *
-     * @param codon a string containing 9 nucleotide letters capatalized
+     * @param codon a string containing 9 nucleotide letters, capitalized
      * @return a ArrayList containing 3 numbers each representing a codon
      */
 
