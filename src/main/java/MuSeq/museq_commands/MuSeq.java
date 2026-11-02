@@ -31,8 +31,8 @@ public class MuSeq implements Runnable{
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
     int bpm = -1;
 
-    @Option(names = {"-c", "--chr"}, description = "Specific chromosome by number to convert to MIDI")
-    int chromosomeNumber = -1;
+    @Option(names = {"-c", "--chr"}, description = "Specific chromosome to convert to MIDI")
+    String chromosome;
 
     @Option(names = {"-g", "--gene"}, description = "Specific gene by gene ID to convert to MIDI")
     String geneID = "";
@@ -51,7 +51,7 @@ public class MuSeq implements Runnable{
         // als testje print het nu alle opties TODO dit weghalen uiteindelijk
         System.out.println("instrument: " + instrument);
         System.out.println("bpm: " + bpm);
-        System.out.println("chromosome: " + chromosomeNumber);
+        System.out.println("chromosome: " + chromosome);
         System.out.println("gene: " + geneID);
         System.out.println("output: " + outputFile);
         System.out.println("input: " + inputFile);
@@ -62,7 +62,7 @@ public class MuSeq implements Runnable{
         MidiData midiData = new MidiData(10);
         // read fasta file. MidiData converts the FASTA to MIDI notes.
         try {
-            fastaReader.readFasta(inputFile, midiData);
+            fastaReader.readFasta(inputFile, midiData, chromosome);
         } catch (IOException e) {
             // if file could not be read
             throw new RuntimeException(e);

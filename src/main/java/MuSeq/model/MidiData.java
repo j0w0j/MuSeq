@@ -62,7 +62,8 @@ public class MidiData {
 
             // stop adding to metadata if it is full!
             if (midiMetadata.size() >= metadataAmount) {
-                unusedNucleotides = line.substring(i * 3);
+                splitFastaLineIntoNotes(line.substring(i * 3));
+                return;
             }
 
             // check if current section of the line is long enough (>=9) to be converted.
@@ -133,7 +134,7 @@ public class MidiData {
 
     public ArrayList<Integer> getMidiMetadata() {
         if (midiMetadata.size() < metadataAmount) {
-            throw new IllegalArgumentException("The input FASTA file was too short to make a song.\nTry a bigger FASTA file.");
+            throw new IllegalArgumentException("The input was too short to make a song.\nTry a bigger FASTA file.");
         }
 
         return midiMetadata;
