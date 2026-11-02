@@ -1,19 +1,18 @@
-package MuSeq.outputhandler;
+package MuSeq.translator;
 
 
 public class BpmCalculator {
 
     private final int bpm;
-    private final int amount;
+    private final int codonNumber;
 
-    public BpmCalculator(Integer amount) {
-        this.amount = amount;
+    public BpmCalculator(Integer codonNumber) {
+        this.codonNumber = codonNumber;
 
         // calculate BPM with amount
-        this.bpm = calculateBpm(amount);
+        this.bpm = calculateBpm(codonNumber);
     }
 
-    // random calculation, we can change this later
     private int calculateBpm(int amount) {
         int calculated = 80 + (amount * 5);
         return Math.max(60, Math.min(200, calculated));
@@ -24,6 +23,6 @@ public class BpmCalculator {
     }
 
     public int getAmount() {
-        return amount;
+        return codonNumber;
     }
 }

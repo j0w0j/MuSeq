@@ -2,8 +2,9 @@ package MuSeq.museq_commands;
 
 import MuSeq.file_input.FastaReader;
 import MuSeq.model.MidiData;
-import MuSeq.outputhandler.BpmCalculator;
+import MuSeq.translator.BpmCalculator;
 import MuSeq.outputhandler.WriteMidi;
+import MuSeq.translator.InstrumentCalculator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -26,24 +27,24 @@ public class MuSeq implements Runnable{
 
     // default piano
     @Option(names = {"-i", "--instrument"}, description = "Instrument name")
-    int instrument = 0;
+    Integer instrument;
 
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm)")
-    int bpm = -1;
+    Integer bpm;
 
     @Option(names = {"-c", "--chr"}, description = "Specific chromosome to convert to MIDI")
     String chromosome;
 
     @Option(names = {"-g", "--gene"}, description = "Specific gene by gene ID to convert to MIDI")
-    String geneID = "";
+    String geneID;
 
     @Option(names = {"-o", "--output"}, description = "Name of the output MIDI file")
-    String outputFile = "";
+    String outputFile;
 
     // INPUT FASTA FILE
 
     @Parameters(paramLabel = "Input FASTA file", description = "Input FASTA file to convert to MIDI")
-    String inputFile = "";
+    String inputFile;
 
     // SING FUNCTIONALITY
     @Override
@@ -72,13 +73,27 @@ public class MuSeq implements Runnable{
         List<Integer> metadata = midiData.getMidiMetadata();
 
         int finalBpm;
-        // user did not give bpm
-        if (bpm == -1) {
-            BpmCalculator bpmCalculator = new BpmCalculator(metadata.getFirst()); //first codon is for bpm
-            finalBpm =bpmCalculator.getBpm();
-        // custom bpm
-        } else {
+        // user did not give bpm, get bpm from metadata
+        if (bpm == null) {
+            BpmCalculator bpmCalculator = new BpmCalculator(metadata.getFirst()); // first codon is for bpm
+            finalBpm = bpmCalculator.getBpm();
+        // if user did give bpm, use that (if valid)
+        } else if (bpm > 0) {
             finalBpm = bpm;
+        } else {
+            throw new IllegalArgumentException(String.format("Bpm should be greater than 0! Current input bpm: %d", bpm));
+        }
+
+        int finalInstrument;
+        // user did not give instrument, get instrument from metadata
+        if (instrument == null) {
+            InstrumentCalculator instrumentCalculator = new InstrumentCalculator(metadata.get(1), metadata.get(2)); // second and third codon are for the instrument
+            finalInstrument = instrumentCalculator.getInstrument();
+        // if user did give instrument, use that (if valid)
+        } else if (instrument >= 0 & instrument <= 127) {
+            finalInstrument = instrument;
+        } else {
+            throw new IllegalArgumentException(String.format("Instrument number %d is not a valid option! Valid options are from 1 to 127.", instrument));
         }
 
         List<Integer> pitches = midiData.getMidiNotesPitch();
@@ -91,7 +106,7 @@ public class MuSeq implements Runnable{
             notes.add(List.of(pitches.get(i), lengths.get(i), volumes.get(i)));
         }
 
-        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm, instrument);
+        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm, finalInstrument);
         int exitCode = midiCommand.writeMidiFile();
         System.out.println("exit " + exitCode);
     }
