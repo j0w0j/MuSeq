@@ -25,7 +25,7 @@ public class MuSeq implements Runnable{
     /**
      * all possible commandline arguments and their description
      */
-    @Option(names = {"-i", "--instrument"}, description = "Instrument number standard per MIDI between 1-128. If not specified, it will be calculated using the inputfile")
+    @Option(names = {"-i", "--instrument"}, description = "Instrument number standard per MIDI between 0-127. If not specified, it will be calculated using the inputfile")
     Integer instrument;
 
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm) if not specified, it will be calculated using the inputfile")
@@ -94,7 +94,7 @@ public class MuSeq implements Runnable{
         } else if (instrument >= 0 & instrument <= 127) {
             finalInstrument = instrument;
         } else {
-            throw new IllegalArgumentException(String.format("Instrument number %d is not a valid option! Valid options are from 1 to 127.", instrument));
+            throw new IllegalArgumentException(String.format("Instrument number %d is not a valid option! Valid options are from 0 to 127.", instrument));
         }
 
         List<Integer> pitches = midiData.getMidiNotesPitch();

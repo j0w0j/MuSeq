@@ -3,6 +3,7 @@ package MuSeq.file_input;
 import MuSeq.model.MidiData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used for testing lines read by FastaReader.
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class FastaReaderLineTester extends MidiData {
 
-    private ArrayList<String> lines = new ArrayList<String>();;
+    private List<String> lines = new ArrayList<String>();;
 
     /**
      *
@@ -22,7 +23,7 @@ public class FastaReaderLineTester extends MidiData {
         super(metadataAmount);
     }
 
-    public ArrayList<String> getLines() {
+    public List<String> getLines() {
         return lines;
     }
 
