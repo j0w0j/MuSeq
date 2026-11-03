@@ -44,6 +44,7 @@ public class FastaReader {
     public void readFasta(String filepath, MidiData midiData, String chromosome) throws IOException {
 
         boolean sequenceIsFromSelectedChromosome = false;
+        boolean isChromosomeFound = false;
 
         try {
             // if file is large, ask user whether to continue.
@@ -62,7 +63,11 @@ public class FastaReader {
                     // check header lines for chromosome and then skip the line.
                     if (line.startsWith(">")) {
                         if (chromosome != null) {
+                            System.out.println(line);
                             sequenceIsFromSelectedChromosome = containsChromosome(line, chromosome);
+                            if (sequenceIsFromSelectedChromosome) {
+                                isChromosomeFound = true;
+                            }
                         }
                         continue;
                     }
@@ -89,6 +94,10 @@ public class FastaReader {
         } catch (IOException e) {
             // for other errors that might occur
             throw new IOException("Error reading file: " + filepath);
+        }
+        if (!isChromosomeFound) {
+            throw new IllegalArgumentException("Invalid chromosome input!\n" +
+                    String.format("Chromosome '%s' is not in the input file!", chromosome));
         }
     }
 
