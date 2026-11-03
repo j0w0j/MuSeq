@@ -1,17 +1,14 @@
 package MuSeq.file_input;
 
-import MuSeq.model.MidiData;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.Parameter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +27,7 @@ class FastaReaderTest {
 
 
     // source - https://stackoverflow.com/questions/46712485
-    static Stream<Arguments> getValidData() {
+    static Stream<Arguments> getValidTestData() {
         ExpectedFastaLines expectedLines = new ExpectedFastaLines();
         return Stream.of(
                 Arguments.of("src/test/test_files/test_valid1.fasta", expectedLines.getTestValid1()),
@@ -44,8 +41,8 @@ class FastaReaderTest {
      * Test if valid FASTA files are read correctly.
      */
     @ParameterizedTest
-    @MethodSource("getValidData")
-    void testReadFastaSunnyDay(String filepath, ArrayList<String> expectedLines) throws IOException {
+    @MethodSource("getValidTestData")
+    void testReadFastaSunnyDay(String filepath, List<String> expectedLines) throws IOException {
 
         fastaReader.readFasta(filepath, readerTester);
 
@@ -56,7 +53,7 @@ class FastaReaderTest {
      * Test if invalid FASTA files throw the expected errors.
      */
     @Test
-    void testReadFastaRainyDay() throws IOException {
+    void testReadFastaRainyDay() {
 
         // Files with invalid FASTA format,
         // example: characters that are not A, T, C, G or U in sequences.
@@ -71,5 +68,25 @@ class FastaReaderTest {
         assertThrows(FileNotFoundException.class, () -> {
             fastaReader.readFasta("this file does not exist!", readerTester);
         });
+    }
+
+    // source - https://stackoverflow.com/questions/46712485
+    static Stream<Arguments> getChromosomeTestData() {
+        return Stream.of(
+                Arguments.of("1", Arrays.asList("AAA", "CCC", "TTT")),
+                Arguments.of("x", Arrays.asList("GCGCGC")),
+                Arguments.of("3CEN", Arrays.asList("CCCCCCCCCC", "CCCCCCCCCC")),
+                Arguments.of("3", Arrays.asList("CCCCCCCCCC", "CCCCCCCCCC", "ATATATATATAT")),
+                Arguments.of("22", Arrays.asList("GG", "TTT", "AA", "C")),
+                Arguments.of("mT", Arrays.asList("T"))
+                );
+    }
+
+    @ParameterizedTest
+    @MethodSource("getChromosomeTestData")
+    void testReadFastaWithChromosomeSunnyDay(String chromosome, List<String> expectedLines) throws IOException {
+        fastaReader.readFasta("src/test/test_files/test_chromosome.fasta", readerTester, chromosome);
+
+        assertEquals(expectedLines, readerTester.getLines());
     }
 }

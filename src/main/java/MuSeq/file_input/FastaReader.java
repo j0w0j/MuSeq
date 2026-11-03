@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +43,7 @@ public class FastaReader {
     public void readFasta(String filepath, MidiData midiData, String chromosome) throws IOException {
 
         boolean sequenceIsFromSelectedChromosome = false;
+        boolean isChromosomeFound = false;
 
         try {
             // if file is large, ask user whether to continue.
@@ -63,6 +63,9 @@ public class FastaReader {
                     if (line.startsWith(">")) {
                         if (chromosome != null) {
                             sequenceIsFromSelectedChromosome = containsChromosome(line, chromosome);
+                            if (sequenceIsFromSelectedChromosome) {
+                                isChromosomeFound = true;
+                            }
                         }
                         continue;
                     }
@@ -89,6 +92,10 @@ public class FastaReader {
         } catch (IOException e) {
             // for other errors that might occur
             throw new IOException("Error reading file: " + filepath);
+        }
+        if (!isChromosomeFound & chromosome != null) {
+            throw new IllegalArgumentException("Invalid chromosome input!\n" +
+                    String.format("Chromosome '%s' is not in the input FASTA file!", chromosome));
         }
     }
 
@@ -189,7 +196,7 @@ public class FastaReader {
 
         // pattern matches chromosome ID, NOT followed by any number
         // example: chromosome 3R will match chromosome 3, but chromosome 1 will not match chromosome 12.
-        String chromosomePatternString = String.format("chromosome %s[^0-9]", chromosome);
+        String chromosomePatternString = String.format("chromosome %s[^0-9]*", chromosome);
         Pattern chromosomePattern = Pattern.compile(chromosomePatternString, Pattern.CASE_INSENSITIVE);
         Matcher matcher = chromosomePattern.matcher(header);
         return matcher.find();
