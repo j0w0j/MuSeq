@@ -95,7 +95,7 @@ public class FastaReader {
         }
         if (!isChromosomeFound & chromosome != null) {
             throw new IllegalArgumentException("Invalid chromosome input!\n" +
-                    String.format("Chromosome '%s' is not in the input file!", chromosome));
+                    String.format("Chromosome '%s' is not in the input FASTA file!", chromosome));
         }
     }
 

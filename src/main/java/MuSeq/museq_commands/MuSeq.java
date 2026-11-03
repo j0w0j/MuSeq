@@ -50,14 +50,6 @@ public class MuSeq implements Runnable{
      */
     @Override
     public void run() {
-        // als testje print het nu alle opties TODO dit weghalen uiteindelijk
-        System.out.println("instrument: " + instrument);
-        System.out.println("bpm: " + bpm);
-        System.out.println("chromosome: " + chromosome);
-        System.out.println("gene: " + geneID);
-        System.out.println("output: " + outputFile);
-        System.out.println("input: " + inputFile);
-
         FastaReader fastaReader = new FastaReader();
 
         // MidiData stores MidiNotes and MidiMetadata
