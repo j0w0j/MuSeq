@@ -3,7 +3,6 @@ package MuSeq.outputhandler;
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Writes all created midi data into the output file
@@ -11,22 +10,18 @@ import java.util.List;
 public class WriteMidi {
 
     private File outputFile = new File("output/output.mid");
-    private final List<List<Integer>> notes; // notes [pitch, length in ticks, velocity)
+    private final Sequence sequence;
+    private final Track track;
     private final int bpm;
     private final int instrument;
-
-    public WriteMidi(List<List<Integer>> notes, int bpm) {
-        this.notes = notes;
-        this.bpm = bpm;
-        this.instrument = 0;
-    }
 
     /**
      * Makes output file name given user input
      *
      */
-    public WriteMidi(List<List<Integer>> notes, String customPath, int bpm, int instrument) {
-        this.notes = notes;
+    public WriteMidi(Sequence sequence, Track track, String customPath, int bpm, int instrument) {
+        this.sequence = sequence;
+        this.track = track;
         this.bpm = bpm;
         this.instrument = instrument;
         if (customPath != null && !customPath.isEmpty()) {
@@ -61,9 +56,6 @@ public class WriteMidi {
                 outputFile.getParentFile().mkdirs();
             }
 
-            Sequence sequence = new Sequence(Sequence.PPQ, 480);
-            Track track = sequence.createTrack();
-
             ShortMessage instrumentMessage  = new ShortMessage();
             instrumentMessage.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument,0);
             track.add(new MidiEvent(instrumentMessage, 0));
@@ -79,28 +71,6 @@ public class WriteMidi {
             MetaMessage tempoMessage = new MetaMessage();
             tempoMessage.setMessage(0x51, tempoData, 3);
             track.add(new MidiEvent(tempoMessage, 0));
-
-
-            long currentTick = 0;
-
-            for (List<Integer> note : notes) {
-                int pitch = note.get(0);
-                int duration = note.get(1);   // length in ticks
-                int velocity = note.get(2);   // 0-127
-
-                // note ON
-                ShortMessage on = new ShortMessage();
-                on.setMessage(ShortMessage.NOTE_ON, 0, pitch, velocity);
-                track.add(new MidiEvent(on, currentTick));
-
-                // note OFF
-                ShortMessage off = new ShortMessage();
-                off.setMessage(ShortMessage.NOTE_OFF, 0, pitch, 0);
-                track.add(new MidiEvent(off, currentTick + duration));
-
-                // next note starts when this one ends, so the lengths define the rhythm
-                currentTick += duration;
-            }
 
             MidiSystem.write(sequence, 1, outputFile);
 

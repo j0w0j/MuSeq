@@ -38,12 +38,12 @@ public class FastaReader {
      *
      * @param filepath Path to the FASTA file to read, as String.
      * @param midiData Class which converts the FASTA to MIDI, and then stores it.
-     * @param chromosome chromosome ID to check for (e.g. 5, 2L, Y or MT).
+     * @param headerFilter String to filter headers for. If the String is not in a header, the corresponding sequence will be skipped.
      */
-    public void readFasta(String filepath, MidiData midiData, String chromosome) throws IOException {
+    public void readFasta(String filepath, MidiData midiData, String headerFilter) throws IOException {
 
-        boolean sequenceIsFromSelectedChromosome = false;
-        boolean isChromosomeFound = false;
+        boolean sequenceIsFiltered = false;
+        boolean isFilterFound = false;
 
         try {
             // if file is large, ask user whether to continue.
@@ -59,19 +59,19 @@ public class FastaReader {
                     // remove leading and trailing space (similar to python's .strip())
                     line = line.trim();
 
-                    // check header lines for chromosome and then skip the line.
+                    // check header lines for header filter and then skip the line.
                     if (line.startsWith(">")) {
-                        if (chromosome != null) {
-                            sequenceIsFromSelectedChromosome = containsChromosome(line, chromosome);
-                            if (sequenceIsFromSelectedChromosome) {
-                                isChromosomeFound = true;
+                        if (headerFilter != null) {
+                            sequenceIsFiltered = containsString(line, headerFilter);
+                            if (sequenceIsFiltered) {
+                                isFilterFound = true;
                             }
                         }
                         continue;
                     }
 
-                    // skip the line if it is not from the user selected chromosome
-                    if (chromosome != null & !sequenceIsFromSelectedChromosome) {
+                    // skip the line if it is not from the user selected filter
+                    if (headerFilter != null & !sequenceIsFiltered) {
                         continue;
                     }
 
@@ -93,9 +93,9 @@ public class FastaReader {
             // for other errors that might occur
             throw new IOException("Error reading file: " + filepath);
         }
-        if (!isChromosomeFound & chromosome != null) {
-            throw new IllegalArgumentException("Invalid chromosome input!\n" +
-                    String.format("Chromosome '%s' is not in the input FASTA file!", chromosome));
+        if (!isFilterFound & headerFilter != null) {
+            throw new IllegalArgumentException("Invalid filter input!\n" +
+                    String.format("The text to filter for '%s' is not in any header in the input FASTA file.", headerFilter));
         }
     }
 
@@ -187,18 +187,18 @@ public class FastaReader {
     }
 
     /**
-     * Check if a FASTA header contains a specific chromosome.
-     * @param header Header line to check for chromosome
-     * @param chromosome chromosome ID to check for (e.g. 5, 22, Y or MT).
-     * @return true if the chromosome is found. false if it is not found.
+     * Check if a FASTA header contains a specific String.
+     * @param header Header line to check for
+     * @param stringToFind specific string to search for in the line.
+     * @return true if the string is found. false if it is not found.
      */
-    private boolean containsChromosome(String header, String chromosome) {
+    private boolean containsString(String header, String stringToFind) {
 
-        // pattern matches chromosome ID, NOT followed by any number
-        // example: chromosome 3R will match chromosome 3, but chromosome 1 will not match chromosome 12.
-        String chromosomePatternString = String.format("chromosome %s[^0-9]*", chromosome);
-        Pattern chromosomePattern = Pattern.compile(chromosomePatternString, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = chromosomePattern.matcher(header);
+        // pattern matches stringToFind, NOT followed by any word character
+        // this makes it so that chromosome 1 will not match chromosome 12 for example.
+        String filterPatternString = String.format("%s(?![\\w])", stringToFind);
+        Pattern filterPattern = Pattern.compile(filterPatternString, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = filterPattern.matcher(header);
         return matcher.find();
     }
 
