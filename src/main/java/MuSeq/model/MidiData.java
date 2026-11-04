@@ -1,8 +1,12 @@
 package MuSeq.model;
 
+import MuSeq.outputhandler.NoteToMidi;
 import MuSeq.translator.LettersToNumbers;
 import MuSeq.translator.NumberToNote;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Track;
 import java.util.ArrayList;
 
 
@@ -11,9 +15,9 @@ import java.util.ArrayList;
  */
 public class MidiData {
 
-    private ArrayList<Integer> midiNotesPitch = new ArrayList<Integer>();
-    private ArrayList<Integer> midiNotesLength = new ArrayList<Integer>();
-    private ArrayList<Integer> midiNotesVolume = new ArrayList<Integer>();
+    // the MIDI/musical data
+    private Sequence sequence;
+    private Track track;
 
     private final int metadataAmount;
 
@@ -23,12 +27,21 @@ public class MidiData {
     private LettersToNumbers lettersToNumbers = new LettersToNumbers();
     private NumberToNote numberToNote = new NumberToNote();
 
+    // used for adding notes to the MIDI track
+    private NoteToMidi noteToMidi = new NoteToMidi();
+
     /**
      *
      * @param metadataAmount Amount of codons reserved for the metadata
      */
     public MidiData(int metadataAmount) {
         this.metadataAmount = metadataAmount;
+        try {
+            this.sequence = new Sequence(Sequence.PPQ, 480);
+        } catch (InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        }
+        this.track = sequence.createTrack();
     }
 
     /**
@@ -113,12 +126,10 @@ public class MidiData {
                 String codonsToConvert = line.substring(i * 9, i * 9 + 9);
 
                 // convert the codons
-                // codonNote: {pitch, length, volume}
-                ArrayList<Integer> codonNote = convertCodonsToMidi(codonsToConvert);
+                // codonNote: {pitch, length, volume/velocity}
+                ArrayList<Integer> codonNote = convertCodonsToNote(codonsToConvert);
 
-                this.midiNotesPitch.add(codonNote.get(0));
-                this.midiNotesLength.add(codonNote.get(1));
-                this.midiNotesVolume.add(codonNote.get(2));
+                noteToMidi.addNoteToTrack(track, codonNote);
 
             }
             // if current section of the line is not long enough, get a smaller piece (<9).
@@ -131,12 +142,12 @@ public class MidiData {
 
     /**
      * Converts a String of 3 codons (9 nucleotides) to an ArrayList of integers
-     * used as Midi data.
+     * used as notes for the Midi data.
      *
      * @param codonsToConvert String of 3 codons (9 nucleotides).
      * @return ArrayList of integers (used as Midi data).
      */
-    private ArrayList<Integer> convertCodonsToMidi(String codonsToConvert) {
+    private ArrayList<Integer> convertCodonsToNote(String codonsToConvert) {
 
         //first class resulting in 3 numbers
         ArrayList<Integer> codonInt = lettersToNumbers.codonTranslate(codonsToConvert);
@@ -159,27 +170,11 @@ public class MidiData {
         return midiMetadata;
     }
 
-    /**
-     *
-     * @return translated pitch-number for midi file
-     */
-    public ArrayList<Integer> getMidiNotesPitch() {
-        return midiNotesPitch;
+    public Track getTrack() {
+        return track;
     }
 
-    /**
-     *
-     * @return translated notelength number for midi file
-     */
-    public ArrayList<Integer> getMidiNotesLength() {
-        return midiNotesLength;
-    }
-
-    /**
-     *
-     * @return translated volume (velocity) number for midi file
-     */
-    public ArrayList<Integer> getMidiNotesVolume() {
-        return midiNotesVolume;
+    public Sequence getSequence() {
+        return sequence;
     }
 }

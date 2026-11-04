@@ -10,7 +10,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,9 +53,10 @@ public class MuSeq implements Runnable{
     public void run() {
         FastaReader fastaReader = new FastaReader();
 
-        // MidiData stores MidiNotes and MidiMetadata
+        // MidiData stores the Midi sequence, track, and metadata.
         MidiData midiData = new MidiData(10);
-        // read fasta file. MidiData converts the FASTA to MIDI notes.
+
+        // read fasta file. MidiData converts the FASTA to MIDI.
         try {
             fastaReader.readFasta(inputFile, midiData, headerFilter);
         } catch (IOException e) {
@@ -91,17 +91,9 @@ public class MuSeq implements Runnable{
             throw new IllegalArgumentException(String.format("Instrument number %d is not a valid option! Valid options are from 0 to 127.", instrument));
         }
 
-        List<Integer> pitches = midiData.getMidiNotesPitch();
-        List<Integer> lengths = midiData.getMidiNotesLength();
-        List<Integer> volumes = midiData.getMidiNotesVolume();
-
-        // combine pitch, length and volume into one list per note
-        List<List<Integer>> notes = new ArrayList<>();
-        for (int i = 0; i < pitches.size(); i++) {
-            notes.add(List.of(pitches.get(i), lengths.get(i), volumes.get(i)));
-        }
-
-        WriteMidi midiCommand = new WriteMidi(notes, outputFile, finalBpm, finalInstrument);
+        WriteMidi midiCommand = new WriteMidi(
+                midiData.getSequence(), midiData.getTrack(),
+                outputFile, finalBpm, finalInstrument);
         int exitCode = midiCommand.writeMidiFile();
         System.out.println("exit " + exitCode);
     }

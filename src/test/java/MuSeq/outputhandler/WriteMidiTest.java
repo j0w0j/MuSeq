@@ -1,8 +1,12 @@
 package MuSeq.outputhandler;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Track;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -18,6 +22,27 @@ public class WriteMidiTest {
             List.of(67, 960, 100)
     );
 
+    private Track track;
+    private Sequence sequence;
+
+    // make sequence and track of the notes
+    @BeforeAll
+    void setup() {
+        NoteToMidi noteToMidi = new NoteToMidi();
+
+        Sequence sequence = null;
+        try {
+            sequence = new Sequence(Sequence.PPQ, 480);
+        } catch (InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        }
+        Track track = sequence.createTrack();
+
+        for (List<Integer> note : notes) {
+            noteToMidi.addNoteToTrack(track, note);
+        }
+    }
+
     @Test
         // tests if the midi is written
     void testWriteMidiSucces(@TempDir Path tempDir) {
@@ -25,7 +50,7 @@ public class WriteMidiTest {
         // temp map to not get confused
         File testOutputFile = tempDir.resolve("test_output.mid").toFile();
 
-        WriteMidi writer = new WriteMidi(notes, 120);
+        WriteMidi writer = new WriteMidi(sequence, track, 120);
 
         int exitCode = writer.writeMidiFile();
 
@@ -43,12 +68,12 @@ public class WriteMidiTest {
         // 2 possible outcomes:
 
         // returns 0 if file does not exist and the file can be written
-        int firstExitCode = new WriteMidi(notes, 120).writeMidiFile();
+        int firstExitCode = new WriteMidi(sequence, track, 120).writeMidiFile();
         assertEquals(0, firstExitCode);
         assertTrue(testOutputFile.exists(), "The MIDI file should exist after writing");
 
         // if the file already exist return 2 and file will not be written
-        int secondExitCode = new WriteMidi(notes, 120).writeMidiFile();
+        int secondExitCode = new WriteMidi(sequence, track, 120).writeMidiFile();
 
         assertEquals(2, secondExitCode, "File cannot be written because it already exists!");
     }
