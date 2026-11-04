@@ -71,22 +71,32 @@ class FastaReaderTest {
     }
 
     // source - https://stackoverflow.com/questions/46712485
-    static Stream<Arguments> getChromosomeTestData() {
+    static Stream<Arguments> getFilterTestData() {
         return Stream.of(
-                Arguments.of("1", Arrays.asList("AAA", "CCC", "TTT")),
-                Arguments.of("x", Arrays.asList("GCGCGC")),
-                Arguments.of("3CEN", Arrays.asList("CCCCCCCCCC", "CCCCCCCCCC")),
-                Arguments.of("3", Arrays.asList("CCCCCCCCCC", "CCCCCCCCCC", "ATATATATATAT")),
-                Arguments.of("22", Arrays.asList("GG", "TTT", "AA", "C")),
-                Arguments.of("mT", Arrays.asList("T"))
+                Arguments.of("chromosome 1", Arrays.asList("AAA", "CCC", "TTT")),
+                Arguments.of("Chromosome x", Arrays.asList("GCGCGC")),
+                Arguments.of("cHROMOSOME 3CEN", Arrays.asList("CCCCCCCCCC", "CCCCCCCCCC")),
+                Arguments.of("chromosome 3", Arrays.asList("ATATATATATAT")),
+                Arguments.of("chromosome 22", Arrays.asList("GG", "TTT", "AA", "C")),
+                Arguments.of("chromOSOme mT", Arrays.asList("T")),
+                Arguments.of("BRCA1", Arrays.asList("ACGT")),
+                Arguments.of("egfr", Arrays.asList("TGCA"))
                 );
     }
 
     @ParameterizedTest
-    @MethodSource("getChromosomeTestData")
-    void testReadFastaWithChromosomeSunnyDay(String chromosome, List<String> expectedLines) throws IOException {
-        fastaReader.readFasta("src/test/test_files/test_chromosome.fasta", readerTester, chromosome);
+    @MethodSource("getFilterTestData")
+    void testReadFastaWithFilterSunnyDay(String headerFilter, List<String> expectedLines) throws IOException {
+        fastaReader.readFasta("src/test/test_files/test_headerfilter.fasta", readerTester, headerFilter);
 
         assertEquals(expectedLines, readerTester.getLines());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"chromosome XXL", "chromosome 2", "BRCA", "EGFR2", "BRCA2"})
+    void testReadFastaWithFilterRainyDay(String headerFilter) {
+        assertThrows(IllegalArgumentException.class, () -> {
+            fastaReader.readFasta("src/test/test_files/test_headerfilter.fasta", readerTester, headerFilter);
+        });
     }
 }

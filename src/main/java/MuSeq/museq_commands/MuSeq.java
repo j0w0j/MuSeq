@@ -31,11 +31,13 @@ public class MuSeq implements Runnable{
     @Option(names = {"-t", "--tempo"}, description = "Music tempo (bpm) if not specified, it will be calculated using the inputfile")
     Integer bpm;
 
-    @Option(names = {"-c", "--chr"}, description = "Specific chromosome to convert to MIDI")
-    String chromosome;
-
-    @Option(names = {"-g", "--gene"}, description = "Specific gene by gene ID to convert to MIDI")
-    String geneID;
+    @Option(names = {"-f", "--filter"},
+            description = "Text used to filter headers. If the text is not in a header, the corresponding sequence will not be translated to music.\n" +
+                    "Matching is case insensitive.\n" +
+                    "Example usages:\n" +
+                    "\t -h \"chromosome 1\"\n" +
+                    "\t -h \"BRCA1\"")
+    String headerFilter;
 
     @Option(names = {"-o", "--output"}, description = "Name of the output MIDI file. Filepath including filename ending with .mid. File cannot already exist.")
     String outputFile;
@@ -56,7 +58,7 @@ public class MuSeq implements Runnable{
         MidiData midiData = new MidiData(10);
         // read fasta file. MidiData converts the FASTA to MIDI notes.
         try {
-            fastaReader.readFasta(inputFile, midiData, chromosome);
+            fastaReader.readFasta(inputFile, midiData, headerFilter);
         } catch (IOException e) {
             // if file could not be read
             throw new RuntimeException(e);

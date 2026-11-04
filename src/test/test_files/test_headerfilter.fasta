@@ -1,4 +1,4 @@
-> Chromosome 1
+> Chromosome 1,
 AAA
 CCC
 TTT
@@ -10,7 +10,7 @@ CCCCCCCCCC
 CCCCCCCCCC
 >chromosome 22
 GG
->chromosome 22
+>chromosome 22,
 TtT
 >cHrOmOsOmE MT
 T
@@ -19,6 +19,12 @@ T
 AA
 >chromosome 22
 c
+
+>BRCA1
+ACGT
+
+>EGFR
+TGCA
 
 > Chromosome 3
 ATATATATATAT
