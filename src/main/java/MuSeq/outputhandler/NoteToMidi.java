@@ -8,7 +8,7 @@ import java.util.List;
 
 public class NoteToMidi {
 
-    long currentTick = 0;
+    long currentTick = 1; // instruments and bpm are set at tick 0, so start notes at 1 to prevent weird issues.
 
     public void addNoteToTrack(Track track, List<Integer> note) {
 
