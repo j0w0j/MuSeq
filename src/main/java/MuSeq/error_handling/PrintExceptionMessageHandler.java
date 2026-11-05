@@ -9,14 +9,7 @@ import picocli.CommandLine;
 public class PrintExceptionMessageHandler implements CommandLine.IExecutionExceptionHandler {
     /**
      *
-     * @param ex the Exception thrown by the {@code Runnable}, {@code Callable} or {@code Method} user object of the command
-     * @param cmd the CommandLine representing the command or subcommand where the exception occurred
-     * @param parseResult the result of parsing the command line arguments.
-     *                        This is the ParseResult of the <b>top-level command</b>.
-     *               Note that if the exception occurred in a subcommand, you may want to inspect the ParseResult of
-     *               the subcommand that threw the exception, which can be obtained by calling {@code commandLine.getParseResult()}
-     *               on the CommandLine object passed to this method.
-     * @return TODO
+     * this class handles the error handling printing
      */
     public int handleExecutionException(Exception ex,
                                         CommandLine cmd,
