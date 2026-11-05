@@ -1,6 +1,7 @@
 package MuSeq.outputhandler;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -26,17 +27,17 @@ public class WriteMidiTest {
     private Sequence sequence;
 
     // make sequence and track of the notes
-    @BeforeAll
+    @BeforeEach
     void setup() {
         NoteToMidi noteToMidi = new NoteToMidi();
 
-        Sequence sequence = null;
+        sequence = null;
         try {
             sequence = new Sequence(Sequence.PPQ, 480);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
-        Track track = sequence.createTrack();
+        track = sequence.createTrack();
 
         for (List<Integer> note : notes) {
             noteToMidi.addNoteToTrack(track, note);
@@ -46,34 +47,33 @@ public class WriteMidiTest {
     @Test
         // tests if the midi is written
     void testWriteMidiSucces(@TempDir Path tempDir) {
-
         // temp map to not get confused
-        File testOutputFile = tempDir.resolve("test_output.mid").toFile();
+        File testOutputFile = tempDir.resolve("banaan.mid").toFile();
 
-        WriteMidi writer = new WriteMidi(sequence, track, 120);
+        WriteMidi writer = new WriteMidi(sequence, track, testOutputFile.toString(),120,4);
 
         int exitCode = writer.writeMidiFile();
 
-        assertEquals(0, exitCode, "If succes the code should print 0");
+        assertEquals(0, exitCode, "If success the code should print 0");
 
-        assertTrue(testOutputFile.exists(), "Midi file made what a succes!");
+        assertTrue(testOutputFile.exists(), "Midi file made what a success!");
         assertTrue(testOutputFile.length() > 0, "The midi file cannot be empty");
     }
 
     @Test
         // tests if the filename is unique, if not the file wont be written
     void testDoesMidiExist(@TempDir Path tempDir) {
-        File testOutputFile = tempDir.resolve("test_output.mid").toFile();
+        File testOutputFile = tempDir.resolve("banaan.mid").toFile();
 
         // 2 possible outcomes:
 
         // returns 0 if file does not exist and the file can be written
-        int firstExitCode = new WriteMidi(sequence, track, 120).writeMidiFile();
+        int firstExitCode = new WriteMidi(sequence, track, testOutputFile.toString(),120,4).writeMidiFile();
         assertEquals(0, firstExitCode);
         assertTrue(testOutputFile.exists(), "The MIDI file should exist after writing");
 
         // if the file already exist return 2 and file will not be written
-        int secondExitCode = new WriteMidi(sequence, track, 120).writeMidiFile();
+        int secondExitCode = new WriteMidi(sequence, track, "test.mid",120,4).writeMidiFile();
 
         assertEquals(2, secondExitCode, "File cannot be written because it already exists!");
     }
