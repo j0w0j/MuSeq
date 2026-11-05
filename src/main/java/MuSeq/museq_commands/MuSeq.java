@@ -95,6 +95,5 @@ public class MuSeq implements Runnable{
                 midiData.getSequence(), midiData.getTrack(),
                 outputFile, finalBpm, finalInstrument);
         int exitCode = midiCommand.writeMidiFile();
-        System.out.println("exit " + exitCode);
     }
 }
