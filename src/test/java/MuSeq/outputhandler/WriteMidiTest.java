@@ -73,7 +73,7 @@ public class WriteMidiTest {
         assertTrue(testOutputFile.exists(), "The MIDI file should exist after writing");
 
         // if the file already exist return 2 and file will not be written
-        int secondExitCode = new WriteMidi(sequence, track, "test.mid",120,4).writeMidiFile();
+        int secondExitCode = new WriteMidi(sequence, track, testOutputFile.toString(),120,4).writeMidiFile();
 
         assertEquals(2, secondExitCode, "File cannot be written because it already exists!");
     }
