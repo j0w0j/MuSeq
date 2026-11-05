@@ -120,6 +120,15 @@ You can use the tool with the build gradle compiled JAR file:
 ```bash
 java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.mid
 ```
+
+Using the tool with large FASTA files might produce an `OutOfMemoryError`.  
+If this happens, you can try the Java option `-Xmx` to allow Java to use more memory. See the example below:
+```bash
+java -jar -Xmx8G build/libs/MuSeq-1.0-SNAPSHOT.jar large_input.fasta --output large_output.mid
+```
+A more detailed explanation about the `-Xmx` option can be found here:  
+https://docs.oracle.com/en/java/javase/22/docs/specs/man/java.html#extra-options-for-java:~:text=Xmx
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Composing with DNA
