@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NoteToMidi</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">MuSeq.outputhandler</a>
+</div>
+
+<h1>Coverage Summary for Class: NoteToMidi (MuSeq.outputhandler)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NoteToMidi</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (12/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package MuSeq.outputhandler;
+&nbsp;
+&nbsp;import javax.sound.midi.InvalidMidiDataException;
+&nbsp;import javax.sound.midi.MidiEvent;
+&nbsp;import javax.sound.midi.ShortMessage;
+&nbsp;import javax.sound.midi.Track;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="fc">&nbsp;public class NoteToMidi {</b>
+&nbsp;
+<b class="fc">&nbsp;    long currentTick = 1; // instruments and bpm are set at tick 0, so start notes at 1 to prevent weird issues.</b>
+&nbsp;
+&nbsp;    public void addNoteToTrack(Track track, List&lt;Integer&gt; note) {
+&nbsp;
+<b class="fc">&nbsp;        int pitch = note.get(0);      // note pitch</b>
+<b class="fc">&nbsp;        int duration = note.get(1);   // note length</b>
+<b class="fc">&nbsp;        int velocity = note.get(2);   // note volume</b>
+&nbsp;
+&nbsp;        // note ON
+<b class="fc">&nbsp;        ShortMessage on = new ShortMessage();</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            on.setMessage(ShortMessage.NOTE_ON, 0, pitch, velocity);</b>
+&nbsp;        } catch (InvalidMidiDataException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        track.add(new MidiEvent(on, currentTick));</b>
+&nbsp;
+&nbsp;        // note OFF
+<b class="fc">&nbsp;        ShortMessage off = new ShortMessage();</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            off.setMessage(ShortMessage.NOTE_OFF, 0, pitch, 0);</b>
+&nbsp;        } catch (InvalidMidiDataException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        track.add(new MidiEvent(off, currentTick + duration));</b>
+&nbsp;
+&nbsp;        // next note starts when this one ends, so the lengths define the rhythm
+<b class="fc">&nbsp;        currentTick += duration;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-05 15:51</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > WriteMidi</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">MuSeq.outputhandler</a>
+</div>
+
+<h1>Coverage Summary for Class: WriteMidi (MuSeq.outputhandler)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WriteMidi</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (8/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,8%
+  </span>
+  <span class="absValue">
+    (28/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package MuSeq.outputhandler;
+&nbsp;
+&nbsp;import javax.sound.midi.*;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Writes all created midi data into the output file
+&nbsp; */
+&nbsp;public class WriteMidi {
+&nbsp;
+<b class="fc">&nbsp;    private File outputFile = new File(&quot;output/output.mid&quot;);</b>
+&nbsp;    private final Sequence sequence;
+&nbsp;    private final Track track;
+&nbsp;    private final int bpm;
+&nbsp;    private final int instrument;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Makes output file name given user input
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    public WriteMidi(Sequence sequence, Track track, String customPath, int bpm, int instrument) {</b>
+<b class="fc">&nbsp;        this.sequence = sequence;</b>
+<b class="fc">&nbsp;        this.track = track;</b>
+<b class="fc">&nbsp;        this.bpm = bpm;</b>
+<b class="fc">&nbsp;        this.instrument = instrument;</b>
+<b class="pc">&nbsp;        if (customPath != null &amp;&amp; !customPath.isEmpty()) {</b>
+&nbsp;
+&nbsp;            // add .mid if user did not put it behind the output name
+<b class="pc">&nbsp;            if (!customPath.toLowerCase().endsWith(&quot;.mid&quot;)) {</b>
+<b class="nc">&nbsp;                customPath += &quot;.mid&quot;;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            File custom = new File(customPath);</b>
+&nbsp;            // if no path given go to output
+<b class="fc">&nbsp;            if (custom.getParentFile() == null) {</b>
+<b class="fc">&nbsp;                this.outputFile = new File(&quot;output&quot;, customPath);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                this.outputFile = custom;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates midi file and write created midi data into that file
+&nbsp;     * @return 0 if everything went well, 1 or 2 if an error occurred
+&nbsp;     */
+&nbsp;    public int writeMidiFile () {
+&nbsp;        try {
+<b class="fc">&nbsp;            if (outputFile.exists()) {</b>
+<b class="fc">&nbsp;                System.err.println(&quot;File already exists: &quot; + outputFile.getPath());</b>
+&nbsp;                // return 2 if filename already exists
+<b class="fc">&nbsp;                return 2;</b>
+&nbsp;            }
+<b class="pc">&nbsp;            if (outputFile.getParentFile() != null) {</b>
+<b class="fc">&nbsp;                outputFile.getParentFile().mkdirs();</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            ShortMessage instrumentMessage  = new ShortMessage();</b>
+<b class="fc">&nbsp;            instrumentMessage.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument,0);</b>
+<b class="fc">&nbsp;            track.add(new MidiEvent(instrumentMessage, 0));</b>
+&nbsp;
+&nbsp;            // Set tempo
+<b class="fc">&nbsp;            int mpq = 60000000 / bpm;</b>
+<b class="fc">&nbsp;            byte[] tempoData = new byte[]{</b>
+&nbsp;                    (byte) ((mpq &gt;&gt; 16) &amp; 0xFF),
+&nbsp;                    (byte) ((mpq &gt;&gt; 8) &amp; 0xFF),
+&nbsp;                    (byte) (mpq &amp; 0xFF)
+&nbsp;            };
+&nbsp;
+<b class="fc">&nbsp;            MetaMessage tempoMessage = new MetaMessage();</b>
+<b class="fc">&nbsp;            tempoMessage.setMessage(0x51, tempoData, 3);</b>
+<b class="fc">&nbsp;            track.add(new MidiEvent(tempoMessage, 0));</b>
+&nbsp;
+<b class="fc">&nbsp;            MidiSystem.write(sequence, 1, outputFile);</b>
+&nbsp;
+<b class="fc">&nbsp;            System.out.println(&quot;Succes! The MIDI file is written. &quot; + outputFile.getPath());</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            System.err.println(&quot;Oops, something went wrong with writing your file! &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            return 1;</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            System.err.println(&quot;Oops, something went wrong with MIDI data! &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;            return 1;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return 0;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-05 15:51</div>
+</div>
+</body>
+</html>
