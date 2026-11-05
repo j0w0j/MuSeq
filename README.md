@@ -196,9 +196,9 @@ were used for the translations.
 To make your own song, or recreate your favorite song. We made a demo and how to write "Steve's Lava Chicken ~ Jack black"
 with DNA!
 
-To try out the demo you can run the test_files/demo.fasta with -tempo 158:
+To try out the demo you can run the demo_files/demo.fasta with -tempo 158:
 ```bash
-java -jar MuSeq-all.jar test/files/demo.fasta --output demo.mid --tempo 158
+java -jar .\build\libs\MuSeq-1.0-SNAPSHOT-all.jar demo_files/demo.fasta --output demo.mid --tempo 158
 ```
 
 **How to compose in MuSeq:**
