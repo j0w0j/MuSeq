@@ -131,6 +131,19 @@ https://docs.oracle.com/en/java/javase/22/docs/specs/man/java.html#extra-options
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Usage options:
+| option               | usage|
+| -----| -----|
+|-c, --chr  _chromosome_| Specific chromosome to covert to MIDI|
+|-g, --gene _geneID_ Specific gene by gene ID to convert to MIDI|
+|-h, --help | Shows the options and help messages|
+|-i, --instrument _instrumentNumber_ | Instrument number standard per MIDI between 0-127, if not specified instrument will be calculated using the inputfile.|
+|-o, --output _outputFileName_| Name of the output MIDI file, filename in that exact path cannot already exist.|
+|-t, --tempo _bpm_| Music tempo (bpm) if not specified bpm will be calculated using the inputfile.|
+|-V, --version| Print version information and exit|
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p> 
+
 ## Composing with DNA
 
 If you want to compose music from DNA using this tool, here is what you should know:
@@ -523,6 +536,9 @@ feeling of rhythm. We have not been able to introduce time signatures into this 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Tests:
+All tests should succeed except the testDoesMidiExist() test. This test is designed to fail because the file will not be written if the filename already exists.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [contributors-shield]: https://img.shields.io/github/contributors/j0w0j/MuSeq.svg?style=for-the-badge

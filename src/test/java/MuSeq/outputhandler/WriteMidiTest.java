@@ -77,11 +77,4 @@ public class WriteMidiTest {
 
         assertEquals(2, secondExitCode, "File cannot be written because it already exists!");
     }
-
-    @Test
-        // tests if the notes are valid
-    void testValidNotes() {
-        // TODO: Dit kom nog
-        assertTrue(true, "This test is so cool it will succeed always:D");
-    }
 }
