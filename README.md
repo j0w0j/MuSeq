@@ -98,11 +98,11 @@ Make sure you have Java installed on your machine:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation:
-Follow these steps to install MuSeq:
+Follow these steps to install MuSeq (for Windows):
 
 **1.Clone the repository**
 ```bash
-   git clone [https://github.com/j0w0j/MuSeq.git](https://github.com/j0w0j/MuSeq.git)
+git clone git@github.com:j0w0j/MuSeq.git
 ```
 **2. Go to the project folder**
 ```bash
@@ -110,7 +110,7 @@ cd MuSeq
 ```
 **3. Build project with Gradle**
 ```bash
-gradle build 
+.\gradlew.bat shadowJar
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -118,13 +118,13 @@ gradle build
 ## Usage / Quick Start:
 You can use the tool with the build gradle compiled JAR file:
 ```bash
-java -jar build/libs/MuSeq-1.0-SNAPSHOT.jar input.fasta --output output.mid
+java -jar build/libs/MuSeq-1.0-SNAPSHOT-all.jar input.fasta --output output.mid
 ```
 
 Using the tool with large FASTA files might produce an `OutOfMemoryError`.  
 If this happens, you can try the Java option `-Xmx` to allow Java to use more memory. See the example below:
 ```bash
-java -jar -Xmx8G build/libs/MuSeq-1.0-SNAPSHOT.jar large_input.fasta --output large_output.mid
+java -jar -Xmx8G build/libs/MuSeq-1.0-SNAPSHOT-all.jar large_input.fasta --output large_output.mid
 ```
 A more detailed explanation about the `-Xmx` option can be found here:  
 https://docs.oracle.com/en/java/javase/22/docs/specs/man/java.html#extra-options-for-java:~:text=Xmx
@@ -198,7 +198,7 @@ with DNA!
 
 To try out the demo you can run the demo_files/demo.fasta with -tempo 158:
 ```bash
-java -jar .\build\libs\MuSeq-1.0-SNAPSHOT-all.jar demo_files/demo.fasta --output demo.mid --tempo 158
+java -jar build/libs/MuSeq-1.0-SNAPSHOT-all.jar demo_files/demo.fasta --output demo.mid --tempo 158
 ```
 
 **How to compose in MuSeq:**
