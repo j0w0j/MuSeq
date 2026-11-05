@@ -539,9 +539,7 @@ feeling of rhythm. We have not been able to introduce time signatures into this 
 ## Tests:
 All tests should succeed except the testDoesMidiExist() test. This test is designed to fail because the file will not be written if the filename already exists.
 
-![Coverage](https://img.shields.io/badge/Coverage-67%25-orange) 
-<br>
-[Look here at the Test coverage](https://raw.githubusercontent.com/j0w0j/MuSeq/master/htmlReport/index.html)
+Open the following file to look at the Test coverage: `htmlReport/index.html`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
