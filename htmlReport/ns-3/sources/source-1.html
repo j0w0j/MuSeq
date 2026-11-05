@@ -1,0 +1,349 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FastaReader</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">MuSeq.file_input</a>
+</div>
+
+<h1>Coverage Summary for Class: FastaReader (MuSeq.file_input)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FastaReader</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,4%
+  </span>
+  <span class="absValue">
+    (27/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,9%
+  </span>
+  <span class="absValue">
+    (47/56)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package MuSeq.file_input;
+&nbsp;
+&nbsp;import MuSeq.model.MidiData;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.io.FileReader;
+&nbsp;import java.io.IOException;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.NoSuchFileException;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.regex.Matcher;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Can read a FASTA file using the BufferedReader.
+&nbsp; */
+<b class="fc">&nbsp;public class FastaReader {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reads a FASTA file.
+&nbsp;     * Each line is added to MidiData class, which converts it to MIDI notes.
+&nbsp;     *
+&nbsp;     * @param filepath Path to the FASTA file to read, as String.
+&nbsp;     * @param midiData Class which converts the FASTA to MIDI, and then stores it.
+&nbsp;     */
+&nbsp;    public void readFasta(String filepath, MidiData midiData) throws IOException {
+<b class="fc">&nbsp;        readFasta(filepath, midiData, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reads a FASTA file.
+&nbsp;     * Each line is added to MidiData class, which converts it to MIDI notes.
+&nbsp;     *
+&nbsp;     * @param filepath Path to the FASTA file to read, as String.
+&nbsp;     * @param midiData Class which converts the FASTA to MIDI, and then stores it.
+&nbsp;     * @param headerFilter String to filter headers for. If the String is not in a header, the corresponding sequence will be skipped.
+&nbsp;     */
+&nbsp;    public void readFasta(String filepath, MidiData midiData, String headerFilter) throws IOException {
+&nbsp;
+<b class="fc">&nbsp;        boolean sequenceIsFiltered = false;</b>
+<b class="fc">&nbsp;        boolean isFilterFound = false;</b>
+&nbsp;
+&nbsp;        try {
+&nbsp;            // if file is large, ask user whether to continue.
+<b class="fc">&nbsp;            checkFileSize(filepath, 50 * 1024 * 1024);</b>
+&nbsp;
+&nbsp;            // https://www.w3schools.com/java/java_bufferedreader.asp
+<b class="fc">&nbsp;            try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {</b>
+&nbsp;                String line;
+&nbsp;
+&nbsp;                // read fasta file line by line
+<b class="fc">&nbsp;                while ((line = br.readLine()) != null) {</b>
+&nbsp;
+&nbsp;                    // remove leading and trailing space (similar to python&#39;s .strip())
+<b class="fc">&nbsp;                    line = line.trim();</b>
+&nbsp;
+&nbsp;                    // check header lines for header filter and then skip the line.
+<b class="fc">&nbsp;                    if (line.startsWith(&quot;&gt;&quot;)) {</b>
+<b class="fc">&nbsp;                        if (headerFilter != null) {</b>
+<b class="fc">&nbsp;                            sequenceIsFiltered = containsString(line, headerFilter);</b>
+<b class="fc">&nbsp;                            if (sequenceIsFiltered) {</b>
+<b class="fc">&nbsp;                                isFilterFound = true;</b>
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+&nbsp;                    // skip the line if it is not from the user selected filter
+<b class="fc">&nbsp;                    if (headerFilter != null &amp; !sequenceIsFiltered) {</b>
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    line = validateLineFromFasta(line);</b>
+&nbsp;
+&nbsp;                    // skip empty lines
+<b class="fc">&nbsp;                    if (line == null) {</b>
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+&nbsp;                    // MidiData converts Fasta line to Midi data and stores it
+<b class="fc">&nbsp;                    midiData.addFromFastaLine(line);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        } catch (FileNotFoundException | NoSuchFileException e) {
+&nbsp;            // specifically if the file could not be found
+<b class="fc">&nbsp;            throw new FileNotFoundException(&quot;Input file could not be found: &quot; + filepath);</b>
+&nbsp;        } catch (IOException e) {
+&nbsp;            // for other errors that might occur
+<b class="nc">&nbsp;            throw new IOException(&quot;Error reading file: &quot; + filepath);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!isFilterFound &amp; headerFilter != null) {</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Invalid filter input!\n&quot; +</b>
+<b class="fc">&nbsp;                    String.format(&quot;The text to filter for &#39;%s&#39; is not in any header in the input FASTA file.&quot;, headerFilter));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Validate a line from the input FASTA file. For each line:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *     &lt;li&gt;Converts all characters to uppercase.&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;Raises and error if input is not valid FASTA format.&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;Remove all ambiguous nucleotides, so only A, C, G, T or U remain.&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * @param line Current line from the input FASTA file, as String.
+&nbsp;     * @return A new line as String. Empty lines return null.
+&nbsp;     */
+&nbsp;    private String validateLineFromFasta(String line) {
+&nbsp;
+&nbsp;        // return null for empty lines
+<b class="fc">&nbsp;        if (line.isEmpty()) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // convert line to uppercase.
+<b class="fc">&nbsp;        line = line.toUpperCase();</b>
+&nbsp;
+&nbsp;        // check line for invalid FASTA format. throw an error if it is invalid.
+<b class="fc">&nbsp;        if (containsInvalidFastaFormat(line)) {</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Invalid FASTA format in input file!\n&quot; +</b>
+&nbsp;                    &quot;Line:\n&quot; + line);
+&nbsp;        }
+&nbsp;
+&nbsp;        // Remove any characters that are NOT A, C, G, T or U. (Returns null if no characters remain.)
+<b class="fc">&nbsp;        line = removeAmbiguousNucleotides(line);</b>
+&nbsp;
+<b class="fc">&nbsp;        return line;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // matches any character that is NOT IUPAC nucleotide code (from https://www.bioinformatics.org/sms/iupac.html).
+&nbsp;    // matches if it finds at least one character.
+<b class="fc">&nbsp;    private final Pattern invalidFastaLinePattern = Pattern.compile(&quot;[^ACGTURYSWKMBDHVN.-]+&quot;);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check if a line is a valid FASTA sequence.
+&nbsp;     * A sequence containing a character that is not IUPAC nucleotide code is deemed invalid.
+&nbsp;     * Nucleotide codes are used from: &lt;a href=&quot;https://www.bioinformatics.org/sms/iupac.html&quot;&gt;https://www.bioinformatics.org/sms/iupac.html&lt;/a&gt;
+&nbsp;     * More info about IUPAC codes:
+&nbsp;     * &lt;ol&gt;
+&nbsp;     *     &lt;li&gt;&lt;a href=&quot;https://genome.ucsc.edu/goldenPath/help/iupac.html&quot;&gt;https://genome.ucsc.edu/goldenPath/help/iupac.html&lt;/a&gt;&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;&lt;a href=&quot;https://olvtools.com/en/documents/fasta&quot;&gt;https://olvtools.com/en/documents/fasta&lt;/a&gt;&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/FASTA_format#Sequence_representation&quot;&gt;https://en.wikipedia.org/wiki/FASTA_format#Sequence_representation&lt;/a&gt;&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;&lt;a href=&quot;https://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html&quot;&gt;https://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html&lt;/a&gt;&lt;/li&gt;
+&nbsp;     * &lt;/ol&gt;
+&nbsp;     *
+&nbsp;     * @param line FASTA line to check, as String.
+&nbsp;     * @return true if the line is invalid, false if the line is valid.
+&nbsp;     */
+&nbsp;    private boolean containsInvalidFastaFormat(String line) {
+<b class="fc">&nbsp;        Matcher matcher = invalidFastaLinePattern.matcher(line);</b>
+<b class="fc">&nbsp;        return matcher.find();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // matches characters A, C, G, T or U. matches if it finds at least one character.
+<b class="fc">&nbsp;    private final Pattern validNucleotidesPattern = Pattern.compile(&quot;[ACGTU]+&quot;);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remove any characters that are NOT A, C, G, T or U.
+&nbsp;     *
+&nbsp;     * @param line String to remove characters from
+&nbsp;     * @return new String. A filtered line with the characters removed. Returns null if no characters remain.
+&nbsp;     */
+&nbsp;    private String removeAmbiguousNucleotides(String line) {
+<b class="fc">&nbsp;        Matcher matcher = validNucleotidesPattern.matcher(line);</b>
+&nbsp;
+&nbsp;        // empty string builder to append matches to.
+<b class="fc">&nbsp;        StringBuilder filteredLine = new StringBuilder();</b>
+&nbsp;
+&nbsp;        // https://www.geeksforgeeks.org/java/regular-expressions-in-java/
+&nbsp;        // get all matches and append to make new filtered line.
+<b class="fc">&nbsp;        while (matcher.find()) {</b>
+<b class="fc">&nbsp;            String match = matcher.group();</b>
+<b class="fc">&nbsp;            filteredLine.append(match);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // return null if no characters remain.
+<b class="fc">&nbsp;        if (filteredLine.isEmpty()) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return filteredLine.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check if a FASTA header contains a specific String.
+&nbsp;     * @param header Header line to check for
+&nbsp;     * @param stringToFind specific string to search for in the line.
+&nbsp;     * @return true if the string is found. false if it is not found.
+&nbsp;     */
+&nbsp;    private boolean containsString(String header, String stringToFind) {
+&nbsp;
+&nbsp;        // pattern matches stringToFind, NOT followed by any word character
+&nbsp;        // this makes it so that chromosome 1 will not match chromosome 12 for example.
+<b class="fc">&nbsp;        String filterPatternString = String.format(&quot;%s(?![\\w])&quot;, stringToFind);</b>
+<b class="fc">&nbsp;        Pattern filterPattern = Pattern.compile(filterPatternString, Pattern.CASE_INSENSITIVE);</b>
+<b class="fc">&nbsp;        Matcher matcher = filterPattern.matcher(header);</b>
+<b class="fc">&nbsp;        return matcher.find();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * If the file is above the given size, show the user a warning.
+&nbsp;     * User is prompted to choose whether to proceed or not.
+&nbsp;     *
+&nbsp;     * @param filepath          Path of the file to check.
+&nbsp;     * @param sizeToCompare     File size to compare the given file to.
+&nbsp;     */
+&nbsp;    private void checkFileSize(String filepath, int sizeToCompare) throws IOException {
+&nbsp;        // Source - https://stackoverflow.com/a/8721276
+<b class="fc">&nbsp;        Path path = Paths.get(filepath);</b>
+<b class="fc">&nbsp;        long fileSize = Files.size(path);</b>
+&nbsp;
+<b class="pc">&nbsp;        if (fileSize &gt;= sizeToCompare) {</b>
+<b class="nc">&nbsp;            Scanner myObj = new Scanner(System.in);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;This file might be (very) large. Are you sure you want to continue? (y/n)&quot;);</b>
+<b class="nc">&nbsp;            String userInput = myObj.nextLine().toUpperCase();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (userInput.equals(&quot;Y&quot;)) {</b>
+&nbsp;                return;
+<b class="nc">&nbsp;            } else if (userInput.equals(&quot;N&quot;)) {</b>
+<b class="nc">&nbsp;                System.exit(0);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid answer. Please answer only y or n.&quot;);</b>
+<b class="nc">&nbsp;                checkFileSize(filepath, sizeToCompare);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-05 16:19</div>
+</div>
+</body>
+</html>
