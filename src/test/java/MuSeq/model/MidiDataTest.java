@@ -4,6 +4,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import javax.sound.midi.MidiEvent;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MidiDataTest {
@@ -20,19 +22,19 @@ class MidiDataTest {
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 3, 2",
             "ACGTACGTACGTACGTGTGACACAGTGACACACAA, 3, 2",
             "ATGACCTGG, 0, 1",
-            "ACACACACACGTGCTGATCGATCGTACTAGTCGATCGTAGCTAGCTGATCGATCGTACGTACGTAGCTAGCTAGTGCTAGTCGATCGTACGTAGCTACGTAGC, 8, 10"})
+            "ACACACACACGTGCTGATCGATCGTACTAGTCGATCGTAGCTAGCTGATCGATCGTACGTACGTAGCTAGCTAGTGCTAGTCGATCGTACGTAGCTACGTAGC, 8, 10",
+            "A, 0, 0"})
     void testAddFromFastaLine(String line, int expectedNotesAmount, int metadataAmount) {
+
+        expectedNotesAmount *= 2; // each note adds 2 MidiEvents to the track, so expectedNotesAmount*2
+        expectedNotesAmount += 1; // "The track initially contains the meta-event End of Track" -> See Sequence.createTrack doc.
 
         MidiData midiData = new MidiData(metadataAmount); // no codons are reserved for metadata
 
         midiData.addFromFastaLine(line);
 
-        // all lists should be of equal size
-        assertEquals(midiData.getMidiNotesPitch().size(), midiData.getMidiNotesLength().size());
-        assertEquals(midiData.getMidiNotesLength().size(), midiData.getMidiNotesVolume().size());
-
         // amount of notes should be as expected (assumes all lists are of equal size)
-        assertEquals(expectedNotesAmount, midiData.getMidiNotesPitch().size(), "amount of MIDI notes is not as expected");
+        assertEquals(expectedNotesAmount, midiData.getTrack().size(), "amount of MIDI notes is not as expected");
 
         // amount of metadata should be as expected
         assertEquals(metadataAmount, midiData.getMidiMetadata().size());
