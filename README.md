@@ -135,7 +135,7 @@ https://docs.oracle.com/en/java/javase/22/docs/specs/man/java.html#extra-options
 | option               | usage|
 | -----| -----|
 |-c, --chr  _chromosome_| Specific chromosome to covert to MIDI|
-|-g, --gene _geneID_ Specific gene by gene ID to convert to MIDI|
+|-g, --gene _geneID_ | Specific gene by gene ID to convert to MIDI|
 |-h, --help | Shows the options and help messages|
 |-i, --instrument _instrumentNumber_ | Instrument number standard per MIDI between 0-127, if not specified instrument will be calculated using the inputfile.|
 |-o, --output _outputFileName_| Name of the output MIDI file, filename in that exact path cannot already exist.|
